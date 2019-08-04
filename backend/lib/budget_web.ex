@@ -5,7 +5,6 @@ defmodule BudgetWeb do
 
   This can be used in your application as:
 
-      use BudgetWeb, :controller
       use BudgetWeb, :view
 
   The definitions below will be executed for every view,
@@ -16,16 +15,6 @@ defmodule BudgetWeb do
   below. Instead, define any helper function in modules
   and import those modules here.
   """
-
-  def controller do
-    quote do
-      use Phoenix.Controller, namespace: BudgetWeb
-
-      import Plug.Conn
-      import BudgetWeb.Gettext
-      alias BudgetWeb.Router.Helpers, as: Routes
-    end
-  end
 
   def view do
     quote do
