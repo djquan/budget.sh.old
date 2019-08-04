@@ -1,10 +1,12 @@
 use Mix.Config
 
+host = if System.get_env("CI") == "true", do: "budget_test_postgres", else: "localhost"
+
 config :budget, Budget.Repo,
   username: "postgres",
   password: "postgres",
   database: "budget_test",
-  hostname: "localhost",
+  hostname: host,
   pool: Ecto.Adapters.SQL.Sandbox
 
 config :budget, BudgetWeb.Endpoint,

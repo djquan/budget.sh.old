@@ -1,5 +1,6 @@
-  postgres:
-    image: postgres:11
-    restart: always
-    ports:
-      - "5432:5432"
+budget_test_postgres:
+  image: postgres:11
+  restart: always
+  container_name: budget_test_postgres
+  expose:
+    - "5432"
