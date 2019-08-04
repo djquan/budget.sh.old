@@ -17,6 +17,13 @@ defmodule BudgetWeb.Schema.Schema do
       arg(:password, non_null(:string))
       resolve(&Resolvers.Accounts.signup/3)
     end
+
+    @desc "Sign in user account"
+    field :signin, :session do
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      resolve(&Resolvers.Accounts.signin/3)
+    end
   end
 
   object :user do

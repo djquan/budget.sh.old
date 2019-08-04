@@ -20,4 +20,14 @@ defmodule Budget.Resolvers.Accounts do
         {:ok, %{session: AuthToken.sign(user), user: user}}
     end
   end
+
+  def signin(_, %{email: email, password: password}, _) do
+    case Accounts.authenticate(email, password) do
+      {:ok, user} ->
+        {:ok, %{session: AuthToken.sign(user), user: user}}
+
+      {:error, _} ->
+        {:error, "Invalid username or password"}
+    end
+  end
 end
