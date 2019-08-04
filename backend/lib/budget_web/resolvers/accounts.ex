@@ -1,7 +1,23 @@
 defmodule Budget.Resolvers.Accounts do
   alias Budget.Accounts
+  alias BudgetWeb.Schema
+  alias BudgetWeb.AuthToken
+  alias BudgetWeb.Schema.ChangesetErrors
 
   def me(_, _, _) do
     {:ok, %{email: "username@example.com"}}
+  end
+
+  def signup(_, args, _) do
+    case Accounts.create_user(args) do
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create account", details: ChangesetErrors.error_details(changeset)
+        }
+
+      {:ok, user} ->
+        {:ok, %{session: AuthToken.sign(user), user: user}}
+    end
   end
 end

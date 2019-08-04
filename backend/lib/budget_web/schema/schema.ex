@@ -10,8 +10,22 @@ defmodule BudgetWeb.Schema.Schema do
     end
   end
 
+  mutation do
+    @desc "Create a user account"
+    field :signup, :session do
+      arg(:email, non_null(:string))
+      arg(:password, non_null(:string))
+      resolve(&Resolvers.Accounts.signup/3)
+    end
+  end
+
   object :user do
     field :email, non_null(:string)
+  end
+
+  object :session do
+    field :user, non_null(:user)
+    field :session, non_null(:string)
   end
 
   def context(ctx), do: ctx
