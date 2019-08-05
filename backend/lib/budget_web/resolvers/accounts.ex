@@ -1,4 +1,4 @@
-defmodule Budget.Resolvers.Accounts do
+defmodule BudgetWeb.Resolvers.Accounts do
   alias Budget.Accounts
   alias BudgetWeb.Schema
   alias BudgetWeb.AuthToken

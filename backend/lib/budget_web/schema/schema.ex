@@ -1,6 +1,6 @@
 defmodule BudgetWeb.Schema.Schema do
   use Absinthe.Schema
-  alias Budget.Resolvers
+  alias BudgetWeb.Resolvers
   import_types(Absinthe.Type.Custom)
 
   query do
