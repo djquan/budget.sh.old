@@ -1,6 +1,6 @@
-budget_test_postgres:
+budgetsh_test_postgres:
   image: postgres:11
   restart: always
-  container_name: budget_test_postgres
+  container_name: budgetsh_test_postgres
   expose:
     - "5432"
