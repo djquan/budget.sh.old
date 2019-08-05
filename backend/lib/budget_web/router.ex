@@ -14,7 +14,6 @@ defmodule BudgetWeb.Router do
 
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: BudgetWeb.Schema.Schema,
-      socket: BudgetWeb.UserSocket,
-      interface: :simple
+      socket: BudgetWeb.UserSocket
   end
 end
