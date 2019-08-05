@@ -1,12 +1,14 @@
 defmodule BudgetWeb.Schema.Schema do
   use Absinthe.Schema
   alias BudgetWeb.Resolvers
+  alias BudgetWeb.Schema.Middleware
   import_types(Absinthe.Type.Custom)
 
   query do
     @desc "Get info on the currently logged in user"
     field :me, :user do
       resolve(&Resolvers.Accounts.me/3)
+      middleware(Middleware.Authenticate)
     end
   end
 

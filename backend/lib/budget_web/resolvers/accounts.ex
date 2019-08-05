@@ -4,8 +4,12 @@ defmodule BudgetWeb.Resolvers.Accounts do
   alias BudgetWeb.AuthToken
   alias BudgetWeb.Schema.ChangesetErrors
 
+  def me(_, _, %{context: %{current_user: user}}) do
+    {:ok, user}
+  end
+
   def me(_, _, _) do
-    {:ok, %{email: "username@example.com"}}
+    {:ok, nil}
   end
 
   def signup(_, args, _) do

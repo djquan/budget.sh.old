@@ -4,6 +4,7 @@ defmodule BudgetWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug BudgetWeb.Plugs.SetCurrentUser
   end
 
   scope "/" do

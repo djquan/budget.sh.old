@@ -40,6 +40,23 @@ defmodule Budget.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   @doc """
+  Gets a single user.
+
+  Returns nil if the User does not exist
+
+  ## Examples
+
+      iex> get_user(123)
+      %User{}
+
+      iex> get_user(456)
+      nil
+
+  """
+  @spec get_user(integer) :: %User{} | nil
+  def get_user(id), do: Repo.get!(User, id)
+
+  @doc """
   Creates a user.
 
   ## Examples
