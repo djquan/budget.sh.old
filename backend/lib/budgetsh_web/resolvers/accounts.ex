@@ -1,6 +1,5 @@
 defmodule BudgetSHWeb.Resolvers.Accounts do
   alias BudgetSH.Accounts
-  alias BudgetSHWeb.Schema
   alias BudgetSHWeb.AuthToken
   alias BudgetSHWeb.Schema.ChangesetErrors
 
