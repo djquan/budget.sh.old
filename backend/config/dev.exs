@@ -1,10 +1,10 @@
 use Mix.Config
 
 # Configure your database
-config :budget, Budget.Repo,
+config :budgetsh, BudgetSH.Repo,
   username: "postgres",
   password: "postgres",
-  database: "budget_dev",
+  database: "budgetsh_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -15,7 +15,7 @@ config :budget, Budget.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :budget, BudgetWeb.Endpoint,
+config :budgetsh, BudgetSHWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -56,4 +56,4 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :budget, :sessions, salt: "test salt"
+config :budgetsh, :sessions, salt: "test salt"

@@ -1,9 +1,9 @@
-defmodule Budget.MixProject do
+defmodule BudgetSH.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :budget,
+      app: :budgetsh,
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -16,7 +16,7 @@ defmodule Budget.MixProject do
 
   def application do
     [
-      mod: {Budget.Application, []},
+      mod: {BudgetSH.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

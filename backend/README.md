@@ -1,4 +1,4 @@
-# Budget
+# BudgetSH
 
 To start your Phoenix server:
 

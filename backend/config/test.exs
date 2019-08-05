@@ -1,15 +1,15 @@
 use Mix.Config
 
-host = if System.get_env("CI") == "true", do: "budget_test_postgres", else: "localhost"
+host = if System.get_env("CI") == "true", do: "budgetsh_test_postgres", else: "localhost"
 
-config :budget, Budget.Repo,
+config :budgetsh, BudgetSH.Repo,
   username: "postgres",
   password: "postgres",
-  database: "budget_test",
+  database: "budgetsh_test",
   hostname: host,
   pool: Ecto.Adapters.SQL.Sandbox
 
-config :budget, BudgetWeb.Endpoint,
+config :budgetsh, BudgetSHWeb.Endpoint,
   http: [port: 4002],
   server: false
 
@@ -19,4 +19,4 @@ config :argon2_elixir,
   t_cost: 1,
   m_cost: 8
 
-config :budget, :sessions, salt: "test salt"
+config :budgetsh, :sessions, salt: "test salt"

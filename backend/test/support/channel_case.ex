@@ -1,4 +1,4 @@
-defmodule BudgetWeb.ChannelCase do
+defmodule BudgetSHWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -21,15 +21,15 @@ defmodule BudgetWeb.ChannelCase do
       use Phoenix.ChannelTest
 
       # The default endpoint for testing
-      @endpoint BudgetWeb.Endpoint
+      @endpoint BudgetSHWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Budget.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(BudgetSH.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Budget.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(BudgetSH.Repo, {:shared, self()})
     end
 
     :ok

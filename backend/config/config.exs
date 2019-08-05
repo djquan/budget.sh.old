@@ -7,15 +7,15 @@
 # General application configuration
 use Mix.Config
 
-config :budget,
-  ecto_repos: [Budget.Repo]
+config :budgetsh,
+  ecto_repos: [BudgetSH.Repo]
 
 # Configures the endpoint
-config :budget, BudgetWeb.Endpoint,
+config :budgetsh, BudgetSHWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "bZCu1qesDOmlOWq8C46JVcmfQ89kJG+nJm4EhBAS9CqpEP4bSlDvE0ZIQXnFKyfF",
-  render_errors: [view: BudgetWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: Budget.PubSub, adapter: Phoenix.PubSub.PG2]
+  render_errors: [view: BudgetSHWeb.ErrorView, accepts: ~w(json)],
+  pubsub: [name: BudgetSH.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
