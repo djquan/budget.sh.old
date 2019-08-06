@@ -1,12 +1,10 @@
 use Mix.Config
 
-host = if System.get_env("CI") == "true", do: "budgetsh_test_postgres", else: "localhost"
-
 config :budgetsh, BudgetSH.Repo,
   username: System.get_env("POSTGRES_TEST_USERNAME", "postgres"),
   password: System.get_env("POSTGRES_TEST_PASSWORD", "postgres"),
   database: "budgetsh_test",
-  hostname: host,
+  hostname: "localhost",
   port: System.get_env("POSTGRES_PORT", "5432"),
   pool: Ecto.Adapters.SQL.Sandbox
 
