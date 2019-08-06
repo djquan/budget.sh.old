@@ -27,3 +27,5 @@ session_salt =
     """
 
 config :budgetsh, :sessions, salt: session_salt
+
+config :budgetsh, BudgetSHWeb.Endpoint, url: [host: "budget.sh", port: 4000]
