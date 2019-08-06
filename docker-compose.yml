@@ -1,0 +1,11 @@
+version: "2.1"
+
+services:
+  breath:
+    image: registry.quan.io/dan/budgetsh:latest
+    restart: always
+    ports:
+      - "4000:4000"
+    network_mode: "host"
+    env_file:
+      - /secrets/budgetsh/secrets.env
