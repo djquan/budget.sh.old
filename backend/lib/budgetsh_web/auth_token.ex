@@ -14,6 +14,8 @@ defmodule BudgetSHWeb.AuthToken do
   verifies its integrity.
   """
   def verify(token) do
-    Phoenix.Token.verify(BudgetSHWeb.Endpoint, @session_salt, token, max_age: 30 * :timer.hours(24))
+    Phoenix.Token.verify(BudgetSHWeb.Endpoint, @session_salt, token,
+      max_age: 30 * :timer.hours(24)
+    )
   end
 end
