@@ -10,10 +10,10 @@ defmodule BudgetSHWeb.Router do
   scope "/" do
     pipe_through :api
 
-    forward "/api", Absinthe.Plug, schema: BudgetSHWeb.Schema.Schema
-
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: BudgetSHWeb.Schema.Schema,
       socket: BudgetSHWeb.UserSocket
+
+    forward "/", Absinthe.Plug, schema: BudgetSHWeb.Schema.Schema
   end
 end
