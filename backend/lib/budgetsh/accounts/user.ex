@@ -6,7 +6,7 @@ defmodule BudgetSH.Accounts.User do
     field :password_hash, :string
     field :email, :string
     field :password, :string, virtual: true
-
+    has_many :accounts, BudgetSH.Finance.Account
     timestamps()
   end
 
