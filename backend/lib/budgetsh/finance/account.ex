@@ -4,6 +4,7 @@ defmodule BudgetSH.Finance.Account do
 
   schema "accounts" do
     field :name, :string
+    field :public_id, :binary_id
     belongs_to :user, BudgetSH.Accounts.User
     timestamps()
   end
@@ -12,6 +13,7 @@ defmodule BudgetSH.Finance.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:name])
+    |> put_change(:public_id, Ecto.UUID.generate())
     |> validate_required([:name])
     |> unique_constraint(:user_id)
   end
