@@ -13,12 +13,13 @@ defmodule BudgetSH.Finance do
 
   ## Examples
 
-      iex> list_accounts()
+      iex> list_accounts(user)
       [%Account{}, ...]
 
   """
-  def list_accounts do
-    Repo.all(Account)
+  def list_accounts(user) do
+    Account.user_scoped(user)
+    |> Repo.all()
   end
 
   @doc """
@@ -28,14 +29,17 @@ defmodule BudgetSH.Finance do
 
   ## Examples
 
-      iex> get_account!(123)
+      iex> get_account!(123, user)
       %Account{}
 
-      iex> get_account!(456)
+      iex> get_account!(456, user)
       ** (Ecto.NoResultsError)
 
   """
-  def get_account!(id), do: Repo.get!(Account, id)
+  def get_account!(id, user) do
+    Account.user_scoped(user)
+    |> Repo.get!(id)
+  end
 
   @doc """
   Creates a account.

@@ -6,47 +6,55 @@ defmodule BudgetSH.FinanceTest do
 
   alias BudgetSH.Finance.Account
 
-  @valid_attrs %{name: "some name"}
-  @update_attrs %{name: "some updated name"}
-  @invalid_attrs %{name: nil}
-  @valid_user_attrs %{password: "some password", email: "username@example.com"}
+  describe "accounts" do
+    @valid_attrs %{name: "some name"}
+    @update_attrs %{name: "some updated name"}
+    @invalid_attrs %{name: nil}
+    @valid_user_attrs %{password: "some password", email: "username@example.com"}
 
-  def account_fixture(attrs \\ %{}) do
-    {:ok, account} =
-      attrs
-      |> Enum.into(@valid_attrs)
-      |> Finance.create_account(user_fixture())
+    def account_fixture(attrs \\ %{}, user_attrs \\ %{}) do
+      {:ok, account} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Finance.create_account(user_fixture(user_attrs))
 
-    account
-  end
+      account
+    end
 
-  def user_fixture(attrs \\ %{}) do
-    {:ok, user} =
-      attrs
-      |> Enum.into(@valid_user_attrs)
-      |> BudgetSH.Accounts.create_user()
+    def user_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        attrs
+        |> Enum.into(@valid_user_attrs)
+        |> BudgetSH.Accounts.create_user()
 
-    user
-  end
+      user
+    end
 
-  test "list_accounts/0 returns all accounts" do
-    account = account_fixture()
+    test "list_accounts/1 returns all accounts" do
+      _bad_account = account_fixture(@valid_attrs, %{email: "hi@hi.com", password: "hunter2"})
+      account = account_fixture()
 
-    list =
-      Finance.list_accounts()
-      |> Enum.map(fn acct -> Repo.preload(acct, :user) end)
+      list =
+        Finance.list_accounts(account.user)
+        |> Enum.map(fn acct -> Repo.preload(acct, :user) end)
 
-    assert list == [account]
-  end
+      assert list == [account]
+    end
 
-  test "get_account!/1 returns the account with given id" do
-    account = account_fixture()
+    test "get_account!/2 returns the account with given id" do
+      account = account_fixture()
 
-    assert Finance.get_account!(account.id)
-           |> Repo.preload(:user) == account
-  end
+      assert Finance.get_account!(account.id, account.user)
+             |> Repo.preload(:user) == account
+    end
 
-  describe "create_account/2" do
+    test "get_account!/2 raises an exception if the account is correct but the user is not" do
+      account = account_fixture()
+      bad_user = user_fixture(%{email: "hi@aol.com", password: "hunter2"})
+
+      assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id, bad_user) end
+    end
+
     test "create_account/2 with valid data creates a account" do
       user = user_fixture()
       assert {:ok, %Account{} = account} = Finance.create_account(@valid_attrs, user)
@@ -58,28 +66,28 @@ defmodule BudgetSH.FinanceTest do
     test "create_account/2 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = Finance.create_account(@invalid_attrs, user_fixture())
     end
-  end
 
-  test "update_account/2 with valid data updates the account" do
-    account = account_fixture()
-    assert {:ok, %Account{} = account} = Finance.update_account(account, @update_attrs)
-    assert account.name == "some updated name"
-  end
+    test "update_account/2 with valid data updates the account" do
+      account = account_fixture()
+      assert {:ok, %Account{} = account} = Finance.update_account(account, @update_attrs)
+      assert account.name == "some updated name"
+    end
 
-  test "update_account/2 with invalid data returns error changeset" do
-    account = account_fixture()
-    assert {:error, %Ecto.Changeset{}} = Finance.update_account(account, @invalid_attrs)
-    assert account == Finance.get_account!(account.id) |> Repo.preload(:user)
-  end
+    test "update_account/2 with invalid data returns error changeset" do
+      account = account_fixture()
+      assert {:error, %Ecto.Changeset{}} = Finance.update_account(account, @invalid_attrs)
+      assert account == Finance.get_account!(account.id, account.user) |> Repo.preload(:user)
+    end
 
-  test "delete_account/1 deletes the account" do
-    account = account_fixture()
-    assert {:ok, %Account{}} = Finance.delete_account(account)
-    assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id) end
-  end
+    test "delete_account/1 deletes the account" do
+      account = account_fixture()
+      assert {:ok, %Account{}} = Finance.delete_account(account)
+      assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id, account.user) end
+    end
 
-  test "change_account/1 returns a account changeset" do
-    account = account_fixture()
-    assert %Ecto.Changeset{} = Finance.change_account(account)
+    test "change_account/1 returns a account changeset" do
+      account = account_fixture()
+      assert %Ecto.Changeset{} = Finance.change_account(account)
+    end
   end
 end
