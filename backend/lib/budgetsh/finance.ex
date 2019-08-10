@@ -18,7 +18,8 @@ defmodule BudgetSH.Finance do
 
   """
   def list_accounts(user) do
-    Account.user_scoped(user)
+    user
+    |> Account.user_scoped()
     |> Repo.all()
   end
 
@@ -37,7 +38,8 @@ defmodule BudgetSH.Finance do
 
   """
   def get_account!(id, user) do
-    Account.user_scoped(user)
+    user
+    |> Account.user_scoped()
     |> Repo.get!(id)
   end
 
@@ -46,10 +48,10 @@ defmodule BudgetSH.Finance do
 
   ## Examples
 
-      iex> create_account(%{field: value})
+      iex> create_account(%{field: value}, user)
       {:ok, %Account{}}
 
-      iex> create_account(%{field: bad_value})
+      iex> create_account(%{field: bad_value}, user)
       {:error, %Ecto.Changeset{}}
 
   """
