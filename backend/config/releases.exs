@@ -7,7 +7,7 @@ config :budgetsh, BudgetSH.Repo,
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
   port: System.get_env("POSTGRES_PORT", "5432"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
-  ssl: System.get_env("POSTGRES_SSL", "false")
+  ssl: System.get_env("POSTGRES_SSL", "false") == "true"
 
 secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
 
