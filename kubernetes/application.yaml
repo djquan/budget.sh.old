@@ -36,14 +36,16 @@ spec:
           httpGet:
             path: /ping
             port: 4000
-          initialDelaySeconds: 30
-          periodSeconds: 3
+          initialDelaySeconds: 45
+          successThreshold: 1
+          failureThreshold: 3
         readinessProbe:
           httpGet:
             path: /ping
             port: 4000
-          initialDelaySeconds: 30
-          periodSeconds: 3
+          initialDelaySeconds: 0
+          successThreshold: 1
+          failureThreshold: 3
         env:
           - name: POSTGRES_HOST
             valueFrom:
