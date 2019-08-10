@@ -4,7 +4,7 @@ config :budgetsh, BudgetSH.Repo,
   username: System.get_env("POSTGRES_PRODUCTION_USERNAME", "postgres"),
   password: System.get_env("POSTGRES_PRODUCTION_PASSWORD", "postgres"),
   database: "budgetsh_prod",
-  hostname: "localhost",
+  hostname: System.get_env("POSTGRES_HOST", "localhost"),
   port: System.get_env("POSTGRES_PORT", "5432"),
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
 
