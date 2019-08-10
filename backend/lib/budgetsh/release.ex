@@ -13,6 +13,7 @@ defmodule BudgetSH.Release do
 
   defp repos do
     Application.load(@app)
+    {:ok, _} = Application.ensure_all_started(@app)
     Application.fetch_env!(@app, :ecto_repos)
   end
 end
