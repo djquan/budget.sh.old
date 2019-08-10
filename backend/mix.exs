@@ -18,7 +18,7 @@ defmodule BudgetSH.MixProject do
   def application do
     [
       mod: {BudgetSH.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ssl]
     ]
   end
 
