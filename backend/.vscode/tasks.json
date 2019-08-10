@@ -15,7 +15,7 @@
       }
     },
     {
-      "label": "test",
+      "label": "test project",
       "type": "shell",
       "command": "mix test",
       "problemMatcher": [
@@ -27,6 +27,39 @@
         "kind": "test",
         "isDefault": true
       }
-    }
+    },
+    {
+      "label": "test buffer",
+      "type": "shell",
+      "command": "echo -n ${relativeFile} > ${workspaceRoot}/.vscode/TEST_LAST && mix test ${relativeFile}",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "test focused",
+      "type": "shell",
+      "command": "echo -n ${relativeFile} > ${workspaceRoot}/.vscode/TEST_LAST && mix test ${relativeFile}:${lineNumber}",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test"
+    },
+    {
+      "label": "test last",
+      "command": "mix test $(cat ${workspaceRoot}/.vscode/TEST_LAST)",
+      "type": "shell",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test",
+    },
   ]
 }
