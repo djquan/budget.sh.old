@@ -25,10 +25,10 @@ spec:
         image: registry.quan.io/dan/budgetsh:latest
         resources:
           requests:
-            memory: "256Mi"
+            memory: "512Mi"
             cpu: "300m"
           limits:
-            memory: "280Mi"
+            memory: "550Mi"
             cpu: "350m"
         ports:
         - containerPort: 4000
