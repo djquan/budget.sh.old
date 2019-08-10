@@ -16,6 +16,17 @@ defmodule BudgetSHWeb do
   and import those modules here.
   """
 
+  def controller do
+    quote do
+      import Plug.Conn
+      import Phoenix.Controller
+      use Phoenix.Controller, namespace: BudgetSHWeb
+
+      import BudgetSHWeb.Gettext
+      alias BudgetSHWeb.Router.Helpers, as: Routes
+    end
+  end
+
   def view do
     quote do
       use Phoenix.View,
