@@ -54,6 +54,8 @@ spec:
             value: "25060"
           - name: POSTGRES_SSL
             value: "true"
+          - name: POOL_SIZE
+            value: "7"
           - name: POSTGRES_PRODUCTION_USERNAME
             value: "budgetsh"
           - name: POSTGRES_PRODUCTION_PASSWORD
