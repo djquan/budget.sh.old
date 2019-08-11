@@ -9,7 +9,7 @@ config :budgetsh, BudgetSH.Repo,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true,
   ssl_opts: [
-    cacertfile: "priv/server-ca.pem"
+    cacertfile: "#{Application.app_dir(:budgetsh, "priv")}/server-ca.pem"
   ]
 
 secret_key_base = System.fetch_env!("SECRET_KEY_BASE")
