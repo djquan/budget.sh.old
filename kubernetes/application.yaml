@@ -52,14 +52,6 @@ spec:
               secretKeyRef:
                 name: postgres
                 key: postgres-host
-          - name: POSTGRES_PORT
-            value: "25060"
-          - name: POSTGRES_SSL
-            value: "true"
-          - name: POOL_SIZE
-            value: "7"
-          - name: POSTGRES_PRODUCTION_USERNAME
-            value: "budgetsh"
           - name: POSTGRES_PRODUCTION_PASSWORD
             valueFrom:
               secretKeyRef:
