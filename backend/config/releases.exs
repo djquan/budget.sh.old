@@ -8,6 +8,7 @@ config :budgetsh, BudgetSH.Repo,
   port: 5432,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true,
+  timeout: 7200_000,
   ssl_opts: [
     cacertfile: "#{Application.app_dir(:budgetsh, "priv")}/server-ca.pem"
   ]
