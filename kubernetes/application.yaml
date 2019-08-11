@@ -1,0 +1,113 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: budgetsh
+  namespace: budgetsh
+spec:
+  selector:
+    matchLabels:
+      app: budgetsh
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: budgetsh
+    spec:
+      containers:
+      - name: budgetsh
+        image: registry.quan.io/dan/budgetsh:latest
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "300m"
+          limits:
+            memory: "550Mi"
+            cpu: "350m"
+        ports:
+        - containerPort: 4000
+        livenessProbe:
+          httpGet:
+            path: /ping
+            port: 4000
+          initialDelaySeconds: 45
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ping
+            port: 4000
+          initialDelaySeconds: 0
+          successThreshold: 1
+          failureThreshold: 3
+        env:
+          - name: POSTGRES_HOST
+            valueFrom:
+              secretKeyRef:
+                name: postgres
+                key: postgres-host
+          - name: POSTGRES_PORT
+            value: "25060"
+          - name: POSTGRES_SSL
+            value: "true"
+          - name: POOL_SIZE
+            value: "7"
+          - name: POSTGRES_PRODUCTION_USERNAME
+            value: "budgetsh"
+          - name: POSTGRES_PRODUCTION_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres
+                key: postgres-password
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                name: budgetsh
+                key: secret-key-base
+          - name: SESSION_SALT
+            valueFrom:
+              secretKeyRef:
+                name: budgetsh
+                key: session-salt
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budgetsh-service
+  namespace: budgetsh
+spec:
+  selector:
+    app: budgetsh
+  ports:
+    - protocol: TCP
+      port: 4000
+      name: web
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: budgetsh-ingress
+  namespace: budgetsh
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - api.budget.sh
+    secretName: letsencrypt-prod
+  rules:
+  - host: api.budget.sh
+    http:
+      paths:
+      - backend:
+          serviceName: budgetsh-service
+          servicePort: 4000
