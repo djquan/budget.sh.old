@@ -7,7 +7,7 @@ ENV MIX_ENV=prod
 RUN mix release --overwrite --force
 
 FROM alpine:3.9 AS app
-RUN apk add --update bash openssl build-base
+RUN apk add --update bash openssl
 
 RUN mkdir /app
 WORKDIR /app
