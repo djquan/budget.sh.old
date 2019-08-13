@@ -67,6 +67,8 @@ spec:
               secretKeyRef:
                 name: budgetsh
                 key: session-salt
+          - name: POOL_SIZE
+            value: "5"
       imagePullSecrets:
         - name: regcred
 ---
