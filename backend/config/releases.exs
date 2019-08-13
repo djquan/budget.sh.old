@@ -5,7 +5,7 @@ config :budgetsh, BudgetSH.Repo,
   password: System.get_env("POSTGRES_PRODUCTION_PASSWORD", "postgres"),
   database: "budgetsh_prod",
   hostname: System.get_env("POSTGRES_HOST", "localhost"),
-  port: 5432,
+  port: 25060,
   pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
   ssl: true,
   timeout: 7200_000
