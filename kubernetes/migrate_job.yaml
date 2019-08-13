@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: migrate-budgetsh
-        image: registry.quan.io/dan/budgetsh:latest
+        image: reg.quan.io/dan/budgetsh:latest
         command: ["bin/budgetsh", "eval","BudgetSH.Release.migrate"]
         env:
           - name: POSTGRES_HOST
@@ -32,6 +32,6 @@ spec:
                 name: budgetsh
                 key: session-salt
       imagePullSecrets:
-        - name: regcred
+        - name: regcred-reg-quan-io
       restartPolicy: Never
   backoffLimit: 4

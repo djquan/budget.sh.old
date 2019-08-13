@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
       - name: budgetsh
-        image: registry.quan.io/dan/budgetsh:latest
+        image: reg.quan.io/dan/budgetsh:latest
         resources:
           requests:
             memory: "512Mi"
@@ -70,7 +70,7 @@ spec:
           - name: POOL_SIZE
             value: "5"
       imagePullSecrets:
-        - name: regcred
+        - name: regcred-reg-quan-io 
 ---
 apiVersion: v1
 kind: Service
