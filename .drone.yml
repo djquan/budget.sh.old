@@ -27,7 +27,7 @@ steps:
   settings:
     restore: true
     mount:
-      - backend/_build/dev
+      - backend/_build
 - name: dialyzer
   image: reg.quan.io/dan/elixir:1.9
   commands:
@@ -45,7 +45,7 @@ steps:
   settings:
     rebuild: true
     mount:
-      - backend/_build/dev
+      - backend/_build
 - name: docker
   when:
     branch:
