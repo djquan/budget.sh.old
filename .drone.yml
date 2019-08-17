@@ -8,6 +8,9 @@ services:
 steps:
 - name: test
   image: reg.quan.io/dan/elixir:1.9
+  when:
+    branch:
+    - master
   environment:
     MIX_ENV: test
     POSTGRES_HOST: "db"
@@ -21,6 +24,8 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
   volumes:
   - name: cache
     path: /cache
@@ -30,6 +35,9 @@ steps:
       - backend/_build
 - name: dialyzer
   image: reg.quan.io/dan/elixir:1.9
+  when:
+    branch:
+    - master
   commands:
     - cd backend
     - mix deps.get
@@ -39,6 +47,8 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
   volumes:
   - name: cache
     path: /cache
@@ -50,6 +60,8 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
   image: plugins/docker
   settings:
     repo: reg.quan.io/dan/budgetsh
@@ -68,6 +80,8 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
   settings:
     kubernetes_server:
       from_secret: kubernetes_host
@@ -86,6 +100,8 @@ steps:
   when:
     branch:
     - master
+    event:
+    - push
   settings:
     kubernetes_server:
       from_secret: kubernetes_host
