@@ -15,7 +15,7 @@ steps:
     - cd backend
     - mix deps.get
     - mix ecto.reset
-    - mix ecto.test
+    - mix test
 image_pull_secrets:
 - dockerconfigjson
 # - name: docker
