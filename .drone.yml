@@ -57,24 +57,22 @@ steps:
     - sleep 50
     - kubectl wait --for=condition=complete -f kubernetes/migrate_job.yaml
     - kubectl delete -f kubernetes/migrate_job.yaml
+- name: deploy - app
+  image: reg.quan.io/dan/drone-kubectl:latest
+  when:
+    branch:
+    - master
+  settings:
+    kubernetes_server:
+      from_secret: kubernetes_host
+    kubernetes_cert:
+      from_secret: kubernetes_crt
+    kubernetes_token:
+      from_secret: kubernetes_token
+  commands:
+    # - sed -ie "s/latest/$DRONE_COMMIT_SHA/" kubernetes/application.yaml
+    - sed -ie "s/DEPLOY_TIME/$(date)/" kubernetes/application.yaml
+    - kubectl apply -f kubernetes/application.yaml
 
 image_pull_secrets:
 - dockerconfigjson
-# - name: deploy - app
-#   image: reg.quan.io/dan/drone-kubectl:latest
-#   when:
-#   branch:
-#   - master
-#   settings:
-#     kubernetes_server:
-#       from_secret: kubernetes_host
-#     kubernetes_cert:
-#       from_secret: kubernetes_crt
-#     kubernetes_token:
-#       from_secret: kubernetes_token
-#   commands:
-#     - sed -ie "s/latest/$DRONE_COMMIT_SHA/" kubernetes/application.yaml
-#     - sed -ie "s/DEPLOY_TIME/$(date)/" kubernetes/application.yaml
-#     - cat kubernetes/application.yaml
-#     - kubectl apply -f kubernetes/application.yaml
-
