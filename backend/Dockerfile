@@ -1,4 +1,4 @@
-FROM registry.quan.io/dan/elixir:1.9 AS build
+FROM reg.quan.io/dan/elixir:1.9 AS build
 
 WORKDIR "/app"
 COPY . .
