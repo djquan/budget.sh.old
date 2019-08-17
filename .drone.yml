@@ -1,13 +1,18 @@
 kind: pipeline
 name: default
 
+services:
+- name: db
+  image: postgres
+
 steps:
 - name: test
   image: reg.quan.io/dan/elixir:1.9
   environment:
     MIX_ENV: test
-    POSTGRES_HOST: "172.17.0.1"
+    POSTGRES_HOST: "postgres"
   commands:
+    - cd backend
     - mix deps.get
     - mix ecto.reset
     - mix ecto.test
