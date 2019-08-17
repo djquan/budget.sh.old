@@ -16,12 +16,36 @@ steps:
     - mix deps.get
     - mix ecto.reset
     - mix test
-# - name: dialyzer
-#   image: reg.quan.io/dan/elixir:1.9
-#   commands:
-#     - cd backend
-#     - mix deps.get
-#     - mix dialyzer
+- name: restore-cache
+  image: drillster/drone-volume-cache
+  when:
+    branch:
+    - master
+  volumes:
+  - name: cache
+    path: /cache
+  settings:
+    restore: true
+    mount:
+      - backend/_build/dev
+- name: dialyzer
+  image: reg.quan.io/dan/elixir:1.9
+  commands:
+    - cd backend
+    - mix deps.get
+    - mix dialyzer
+- name: rebuild-cache
+  image: drillster/drone-volume-cache
+  when:
+    branch:
+    - master
+  volumes:
+  - name: cache
+    path: /cache
+  settings:
+    rebuild: true
+    mount:
+      - backend/_build/dev
 - name: docker
   when:
     branch:
@@ -73,5 +97,9 @@ steps:
     - sed -ie "s/latest/$DRONE_COMMIT_SHA/" kubernetes/application.yaml
     - sed -ie "s/DEPLOY_TIME/$(date)/" kubernetes/application.yaml
     - kubectl apply -f kubernetes/application.yaml
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
 image_pull_secrets:
 - dockerconfigjson
