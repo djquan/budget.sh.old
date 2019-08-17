@@ -16,6 +16,14 @@ steps:
     - mix deps.get
     - mix ecto.reset
     - mix test
+
+- name: dialyzer
+  image: reg.quan.io/dan/elixir:1.9
+  commands:
+    - cd backend
+    - mix deps.get
+    - mix dialyzer
+
 image_pull_secrets:
 - dockerconfigjson
 # - name: docker
