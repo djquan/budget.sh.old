@@ -10,7 +10,7 @@ steps:
   image: reg.quan.io/dan/elixir:1.9
   environment:
     MIX_ENV: test
-    POSTGRES_HOST: "postgres"
+    POSTGRES_HOST: "db"
   commands:
     - cd backend
     - mix deps.get
