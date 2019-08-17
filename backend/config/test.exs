@@ -4,7 +4,7 @@ config :budgetsh, BudgetSH.Repo,
   username: System.get_env("POSTGRES_TEST_USERNAME", "postgres"),
   password: System.get_env("POSTGRES_TEST_PASSWORD", "postgres"),
   database: "budgetsh_test",
-  hostname: "localhost",
+  hostname: Systetm.get_env("POSTGRES_HOST", "localhost")
   port: System.get_env("POSTGRES_PORT", "5432"),
   pool: Ecto.Adapters.SQL.Sandbox
 
