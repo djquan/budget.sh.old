@@ -37,11 +37,13 @@ steps:
     password:
       from_secret: docker_password
     registry: reg.quan.io
+    dockerfile: backend/Dockerfile
+    context: backend
 - name: deploy - migrate db
   image: reg.quan.io/dan/drone-kubectl:latest
   when:
-  branch:
-  - master
+    branch:
+    - master
   settings:
     kubernetes_server:
       from_secret: kubernetes_host
