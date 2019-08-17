@@ -16,13 +16,12 @@ steps:
     - mix deps.get
     - mix ecto.reset
     - mix test
-
-- name: dialyzer
-  image: reg.quan.io/dan/elixir:1.9
-  commands:
-    - cd backend
-    - mix deps.get
-    - mix dialyzer
+# - name: dialyzer
+#   image: reg.quan.io/dan/elixir:1.9
+#   commands:
+#     - cd backend
+#     - mix deps.get
+#     - mix dialyzer
 - name: docker
   when:
     branch:
@@ -38,27 +37,27 @@ steps:
     password:
       from_secret: docker_password
     registry: reg.quan.io
+- name: deploy - migrate db
+  image: reg.quan.io/dan/drone-kubectl:latest
+  when:
+  branch:
+  - master
+  settings:
+    kubernetes_server:
+      from_secret: kubernetes_host
+    kubernetes_cert:
+      from_secret: kubernetes_crt
+    kubernetes_token:
+      from_secret: kubernetes_token
+  commands:
+    - sed -ie "s/latest/$DRONE_COMMIT_SHA/" kubernetes/migrate_job.yaml
+    - kubectl apply -f kubernetes/migrate_job.yaml
+    - sleep 50
+    - kubectl wait --for=condition=complete -f kubernetes/migrate_job.yaml
+    - kubectl delete -f kubernetes/migrate_job.yaml
 
 image_pull_secrets:
 - dockerconfigjson
-# - name: deploy - migrate db
-#   image: reg.quan.io/dan/drone-kubectl:latest
-#   when:
-#   branch:
-#   - master
-#   settings:
-#     kubernetes_server:
-#       from_secret: kubernetes_host
-#     kubernetes_cert:
-#       from_secret: kubernetes_crt
-#     kubernetes_token:
-#       from_secret: kubernetes_token
-#   commands:
-#     - sed -ie "s/latest/$DRONE_COMMIT_SHA/" kubernetes/migrate_job.yaml
-#     - kubectl apply -f kubernetes/migrate_job.yaml
-#     - sleep 50
-#     - kubectl wait --for=condition=complete -f kubernetes/migrate_job.yaml
-#     - kubectl delete -f kubernetes/migrate_job.yaml
 # - name: deploy - app
 #   image: reg.quan.io/dan/drone-kubectl:latest
 #   when:

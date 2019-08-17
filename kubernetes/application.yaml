@@ -17,6 +17,7 @@ spec:
     metadata:
       annotations:
         linkerd.io/inject: enabled
+        deploy-time: DEPLOY_TIME
       labels:
         app: budgetsh
     spec:
