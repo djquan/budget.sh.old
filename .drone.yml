@@ -41,7 +41,7 @@ steps:
   commands:
     - cd backend
     - mix deps.get
-    - mix dialyzer
+    - mix dialyzer --format short --halt-exit-status
 - name: rebuild-cache
   image: drillster/drone-volume-cache
   when:

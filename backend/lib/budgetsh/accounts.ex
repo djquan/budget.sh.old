@@ -4,8 +4,8 @@ defmodule BudgetSH.Accounts do
   """
 
   import Ecto.Query, warn: false
-  alias BudgetSH.Repo
 
+  alias BudgetSH.Repo
   alias BudgetSH.Accounts.User
 
   @doc """

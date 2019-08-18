@@ -12,7 +12,9 @@ defmodule BudgetSH.MixProject do
       aliases: aliases(),
       deps: deps(),
       elixirc_options: [warnings_as_errors: true],
-      dialyzer: [plt_add_deps: :transitive]
+      dialyzer: [
+        plt_add_deps: :transitive
+      ]
     ]
   end
 

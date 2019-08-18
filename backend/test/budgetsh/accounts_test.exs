@@ -2,7 +2,6 @@ defmodule BudgetSH.AccountsTest do
   use BudgetSH.DataCase
 
   alias BudgetSH.Accounts
-
   alias BudgetSH.Accounts.User
 
   @valid_attrs %{password: "some password", email: "username@example.com"}

@@ -2,9 +2,8 @@ defmodule BudgetSH.FinanceTest do
   use BudgetSH.DataCase
 
   alias BudgetSH.Finance
-  alias BudgetSH.Repo
-
   alias BudgetSH.Finance.Account
+  alias BudgetSH.Repo
 
   describe "accounts" do
     @valid_attrs %{name: "some name"}
