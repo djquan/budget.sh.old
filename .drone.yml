@@ -6,19 +6,6 @@ services:
   image: postgres
 
 steps:
-- name: test
-  image: reg.quan.io/dan/elixir:1.9
-  when:
-    branch:
-    - master
-  environment:
-    MIX_ENV: test
-    POSTGRES_HOST: "db"
-  commands:
-    - cd backend
-    - mix deps.get
-    - mix ecto.reset
-    - mix test
 - name: restore-cache
   image: drillster/drone-volume-cache
   when:
@@ -33,6 +20,19 @@ steps:
     restore: true
     mount:
       - backend/_build
+- name: test
+  image: reg.quan.io/dan/elixir:1.9
+  when:
+    branch:
+    - master
+  environment:
+    MIX_ENV: test
+    POSTGRES_HOST: "db"
+  commands:
+    - cd backend
+    - mix deps.get
+    - mix ecto.reset
+    - mix test
 - name: dialyzer
   image: reg.quan.io/dan/elixir:1.9
   when:
