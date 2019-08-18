@@ -7,6 +7,7 @@ defmodule BudgetSH.Finance do
   alias BudgetSH.Repo
 
   alias BudgetSH.Finance.Account
+  alias BudgetSH.Accounts.User
 
   @doc """
   Returns the list of accounts.
@@ -17,6 +18,7 @@ defmodule BudgetSH.Finance do
       [%Account{}, ...]
 
   """
+  @spec list_accounts(%User{}) :: [%Account{}]
   def list_accounts(user) do
     user
     |> Account.user_scoped()
@@ -37,6 +39,7 @@ defmodule BudgetSH.Finance do
       ** (Ecto.NoResultsError)
 
   """
+  @spec get_account!(integer, %User{}) :: %Account{}
   def get_account!(id, user) do
     user
     |> Account.user_scoped()
@@ -55,6 +58,7 @@ defmodule BudgetSH.Finance do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_account(%{}, %User{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
   def create_account(attrs \\ %{}, user) do
     %Account{}
     |> Account.changeset(attrs)
@@ -74,6 +78,7 @@ defmodule BudgetSH.Finance do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec update_account(%Account{}, %{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
   def update_account(%Account{} = account, attrs) do
     account
     |> Account.changeset(attrs)
@@ -92,6 +97,7 @@ defmodule BudgetSH.Finance do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec delete_account(%Account{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
   def delete_account(%Account{} = account) do
     Repo.delete(account)
   end
@@ -105,6 +111,7 @@ defmodule BudgetSH.Finance do
       %Ecto.Changeset{source: %Account{}}
 
   """
+  @spec change_account(%Account{}) :: %Ecto.Changeset{}
   def change_account(%Account{} = account) do
     Account.changeset(account, %{})
   end

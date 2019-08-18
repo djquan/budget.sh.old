@@ -1,6 +1,7 @@
 defmodule BudgetSH.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias BudgetSH.Accounts.User
 
   schema "users" do
     field :password_hash, :string
@@ -10,7 +11,7 @@ defmodule BudgetSH.Accounts.User do
     timestamps()
   end
 
-  @doc false
+  @spec changeset(%User{}, %{}) :: Ecto.Changeset.t()
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :password])
@@ -21,6 +22,7 @@ defmodule BudgetSH.Accounts.User do
     |> put_pass_hash()
   end
 
+  @spec put_pass_hash(Ecto.Changeset.t()) :: Ecto.Changeset.t()
   defp put_pass_hash(
          %Ecto.Changeset{
            valid?: true,

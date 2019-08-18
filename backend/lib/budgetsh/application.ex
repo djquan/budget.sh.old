@@ -5,6 +5,7 @@ defmodule BudgetSH.Application do
 
   use Application
 
+  @spec start(any, any) :: {:error, any} | {:ok, pid}
   def start(_type, _args) do
     children = [
       BudgetSH.Repo,
@@ -17,6 +18,7 @@ defmodule BudgetSH.Application do
     Supervisor.start_link(children, opts)
   end
 
+  @spec config_change(any, any, any) :: :ok
   def config_change(changed, _new, removed) do
     BudgetSHWeb.Endpoint.config_change(changed, removed)
     :ok
