@@ -68,8 +68,10 @@ defmodule BudgetSH.FinanceTest do
 
     test "update_account/2 with valid data updates the account" do
       account = account_fixture()
+      public_id = account.public_id
       assert {:ok, %Account{} = account} = Finance.update_account(account, @update_attrs)
       assert account.name == "some updated name"
+      assert account.public_id == public_id
     end
 
     test "update_account/2 with invalid data returns error changeset" do

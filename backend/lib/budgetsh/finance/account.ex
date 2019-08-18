@@ -16,7 +16,7 @@ defmodule BudgetSH.Finance.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:name])
-    |> put_change(:public_id, Ecto.UUID.generate())
+    |> put_public_id_if_not_present
     |> validate_required([:name])
     |> unique_constraint(:user_id)
   end
@@ -24,5 +24,11 @@ defmodule BudgetSH.Finance.Account do
   @spec user_scoped(%User{}) :: Ecto.Query.t()
   def user_scoped(user) do
     from(a in __MODULE__, where: a.user_id == ^user.id)
+  end
+
+  @spec put_public_id_if_not_present(Ecto.Changeset.t()) :: Ecto.Changeset.t()
+  defp put_public_id_if_not_present(changeset) do
+    changeset
+    |> put_change(:public_id, get_field(changeset, :public_id, Ecto.UUID.generate()))
   end
 end
