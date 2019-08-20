@@ -7,6 +7,7 @@ defmodule BudgetSH.Finance do
   alias BudgetSH.Repo
 
   alias BudgetSH.Finance.Account
+  alias BudgetSH.Finance.Transaction
   alias BudgetSH.Accounts.User
 
   @doc """
@@ -114,5 +115,12 @@ defmodule BudgetSH.Finance do
   @spec change_account(%Account{}) :: %Ecto.Changeset{}
   def change_account(%Account{} = account) do
     Account.changeset(account, %{})
+  end
+
+  def create_transaction(attrs \\ %{}, account) do
+    %Transaction{}
+    |> Transaction.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:account, account)
+    |> Repo.insert()
   end
 end
