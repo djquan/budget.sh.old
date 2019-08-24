@@ -8,6 +8,7 @@ defmodule BudgetSH.Finance.Account do
   schema "accounts" do
     field :name, :string
     field :public_id, :binary_id
+    field :user_account, :boolean, default: false
     belongs_to :user, BudgetSH.Accounts.User
     timestamps()
   end
@@ -15,7 +16,7 @@ defmodule BudgetSH.Finance.Account do
   @spec changeset(%Account{}, %{}) :: Ecto.Changeset.t()
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :user_account])
     |> put_public_id_if_not_present
     |> validate_required([:name])
     |> unique_constraint(:user_id)
