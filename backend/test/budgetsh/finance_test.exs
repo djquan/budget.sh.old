@@ -18,6 +18,10 @@ defmodule BudgetSH.FinanceTest do
     transaction_date: Date.utc_today(),
     tags: ["apple"]
   }
+  @invalid_transaction_attrs %{amount: "ABC", currency_code: "TEST"}
+  @update_transaction_attrs %{
+    amount: "1"
+  }
 
   def account_fixture(attrs \\ %{}, user_attrs \\ %{}) do
     {:ok, account} =
@@ -106,17 +110,20 @@ defmodule BudgetSH.FinanceTest do
       assert {:ok, %Account{}} = Finance.delete_account(account)
       assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id, account.user) end
     end
-
-    test "change_account/1 returns a account changeset" do
-      account = account_fixture()
-      assert %Ecto.Changeset{} = Finance.change_account(account)
-    end
   end
 
   describe "transactions" do
-    # test "list_transactions/1 returns all transactions from a user" do
-    #   transaction = transaction_fixture()
-    # end
+    test "list_transactions/1 returns all transactions from a user" do
+      transaction = transaction_fixture()
+
+      _bad_transacton =
+        transaction_fixture(@valid_transaction_attrs, @valid_account_attrs, %{
+          email: "test@example.org",
+          password: "hunter3"
+        })
+
+      assert [transaction] = Finance.list_transactions(transaction.account)
+    end
 
     # test "list_transactions/2 returns all transactions from a user and account"
 
@@ -131,10 +138,72 @@ defmodule BudgetSH.FinanceTest do
       assert transaction.account == account
     end
 
-    # test "update_transaction/2 with valid data"
-    # test "update_transaction/2 with invalid datta"
+    test "create_transaction/2 with invalid data returns error changeset" do
+      assert {:error, changeset = %Ecto.Changeset{}} =
+               Finance.create_transaction(@invalid_transaction_attrs, account_fixture())
 
-    # test "delete_transaction/1"
-    # test "change_transaction/1 returns a transaction changeset"
+      assert [
+               amount: {"must be numeric", [validation: :format]},
+               transaction_date: {"can't be blank", [validation: :required]}
+             ] = changeset.errors
+    end
+
+    test "get_transaction/2 returns an existing transaction" do
+      transaction = transaction_fixture()
+
+      assert transaction = Finance.get_transaction!(transaction.id, transaction.account)
+    end
+
+    test "get_transaction/2 returns an exception when the transaction id is right but the account is not" do
+      transaction = transaction_fixture()
+
+      bad_account =
+        account_fixture(@valid_account_attrs, %{email: "test@example.org", password: "hunter3"})
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Finance.get_transaction!(transaction.id, bad_account)
+      end
+    end
+
+    test "get_transaction/2 returns an exception when the transaction id does not exist" do
+      assert_raise Ecto.NoResultsError, fn ->
+        Finance.get_transaction!(1000, account_fixture())
+      end
+    end
+
+    test "update_transaction/2 with valid data" do
+      transaction = transaction_fixture()
+      public_id = transaction.public_id
+
+      assert {:ok, %Transaction{} = transaction} =
+               Finance.update_transaction(transaction, @update_transaction_attrs)
+
+      assert transaction.amount == "1"
+      assert transaction.public_id == public_id
+
+      assert transaction ==
+               Finance.get_transaction!(transaction.id, transaction.account)
+               |> Repo.preload(account: :user)
+    end
+
+    test "update_transaction/2 with invalid data" do
+      transaction = transaction_fixture()
+
+      assert {:error, %Ecto.Changeset{}} =
+               Finance.update_transaction(transaction, @invalid_transaction_attrs)
+
+      assert transaction ==
+               Finance.get_transaction!(transaction.id, transaction.account)
+               |> Repo.preload(account: :user)
+    end
+
+    test "delete_transaction/1" do
+      transaction = transaction_fixture()
+      assert {:ok, %Transaction{}} = Finance.delete_transaction(transaction)
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Finance.get_transaction!(transaction.id, transaction.account)
+      end
+    end
   end
 end
