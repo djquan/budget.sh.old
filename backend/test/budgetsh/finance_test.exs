@@ -113,7 +113,7 @@ defmodule BudgetSH.FinanceTest do
   end
 
   describe "transactions" do
-    test "list_transactions/1 returns all transactions from a user" do
+    test "list_transactions/2 returns all transactions from a account" do
       transaction = transaction_fixture()
 
       _bad_transacton =
@@ -124,8 +124,6 @@ defmodule BudgetSH.FinanceTest do
 
       assert [transaction] = Finance.list_transactions(transaction.account)
     end
-
-    # test "list_transactions/2 returns all transactions from a user and account"
 
     test "create_transaction/2 creates a transaction for a user and account" do
       account = account_fixture()
