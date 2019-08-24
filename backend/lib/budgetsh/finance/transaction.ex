@@ -8,7 +8,6 @@ defmodule BudgetSH.Finance.Transaction do
     field :currency_code, :string
     field :public_id, Ecto.UUID
     field :tags, {:array, :string}
-    field :user_id, :id
     field :linked_transaction_id, :id
     field :transaction_date, :date
 
