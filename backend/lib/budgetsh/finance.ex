@@ -20,15 +20,15 @@ defmodule BudgetSH.Finance do
   end
 
   @doc """
-  Gets a single account.
+  Gets a single account by public_id
 
   Raises `Ecto.NoResultsError` if the Account does not exist.
   """
-  @spec get_account!(integer, %User{}) :: %Account{}
-  def get_account!(id, user) do
+  @spec get_account!(binary, %User{}) :: %Account{}
+  def get_account!(public_id, user) do
     user
     |> Account.user_scoped()
-    |> Repo.get!(id)
+    |> Repo.get_by!(public_id: public_id)
   end
 
   @doc """
@@ -96,11 +96,11 @@ defmodule BudgetSH.Finance do
   @doc """
   Returns a transaction
   """
-  @spec get_transaction!(integer, %Account{}) :: %Transaction{}
-  def get_transaction!(id, account) do
+  @spec get_transaction!(binary, %Account{}) :: %Transaction{}
+  def get_transaction!(public_id, account) do
     account
     |> Transaction.account_scoped()
-    |> Repo.get!(id)
+    |> Repo.get_by!(public_id: public_id)
   end
 
   @doc """

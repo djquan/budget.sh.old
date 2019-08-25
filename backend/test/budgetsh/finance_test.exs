@@ -67,7 +67,7 @@ defmodule BudgetSH.FinanceTest do
     test "get_account!/2 returns the account with given id" do
       account = account_fixture()
 
-      assert Finance.get_account!(account.id, account.user)
+      assert Finance.get_account!(account.public_id, account.user)
              |> Repo.preload(:user) == account
     end
 
@@ -75,7 +75,9 @@ defmodule BudgetSH.FinanceTest do
       account = account_fixture()
       bad_user = user_fixture(%{email: "hi@aol.com", password: "hunter2"})
 
-      assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id, bad_user) end
+      assert_raise Ecto.NoResultsError, fn ->
+        Finance.get_account!(account.public_id, bad_user)
+      end
     end
 
     test "create_account/2 with valid data creates a account" do
@@ -103,13 +105,18 @@ defmodule BudgetSH.FinanceTest do
     test "update_account/2 with invalid data returns error changeset" do
       account = account_fixture()
       assert {:error, %Ecto.Changeset{}} = Finance.update_account(account, @invalid_account_attrs)
-      assert account == Finance.get_account!(account.id, account.user) |> Repo.preload(:user)
+
+      assert account ==
+               Finance.get_account!(account.public_id, account.user) |> Repo.preload(:user)
     end
 
     test "delete_account/1 deletes the account" do
       account = account_fixture()
       assert {:ok, %Account{}} = Finance.delete_account(account)
-      assert_raise Ecto.NoResultsError, fn -> Finance.get_account!(account.id, account.user) end
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Finance.get_account!(account.public_id, account.user)
+      end
     end
   end
 
@@ -150,7 +157,7 @@ defmodule BudgetSH.FinanceTest do
     test "get_transaction/2 returns an existing transaction" do
       transaction = transaction_fixture()
 
-      assert transaction = Finance.get_transaction!(transaction.id, transaction.account)
+      assert transaction = Finance.get_transaction!(transaction.public_id, transaction.account)
     end
 
     test "get_transaction/2 returns an exception when the transaction id is right but the account is not" do
@@ -160,13 +167,13 @@ defmodule BudgetSH.FinanceTest do
         account_fixture(@valid_account_attrs, %{email: "test@example.org", password: "hunter3"})
 
       assert_raise Ecto.NoResultsError, fn ->
-        Finance.get_transaction!(transaction.id, bad_account)
+        Finance.get_transaction!(transaction.public_id, bad_account)
       end
     end
 
     test "get_transaction/2 returns an exception when the transaction id does not exist" do
       assert_raise Ecto.NoResultsError, fn ->
-        Finance.get_transaction!(1000, account_fixture())
+        Finance.get_transaction!(Ecto.UUID.generate(), account_fixture())
       end
     end
 
@@ -181,7 +188,7 @@ defmodule BudgetSH.FinanceTest do
       assert transaction.public_id == public_id
 
       assert transaction ==
-               Finance.get_transaction!(transaction.id, transaction.account)
+               Finance.get_transaction!(transaction.public_id, transaction.account)
                |> Repo.preload(account: :user)
     end
 
@@ -192,7 +199,7 @@ defmodule BudgetSH.FinanceTest do
                Finance.update_transaction(transaction, @invalid_transaction_attrs)
 
       assert transaction ==
-               Finance.get_transaction!(transaction.id, transaction.account)
+               Finance.get_transaction!(transaction.public_id, transaction.account)
                |> Repo.preload(account: :user)
     end
 
@@ -201,7 +208,7 @@ defmodule BudgetSH.FinanceTest do
       assert {:ok, %Transaction{}} = Finance.delete_transaction(transaction)
 
       assert_raise Ecto.NoResultsError, fn ->
-        Finance.get_transaction!(transaction.id, transaction.account)
+        Finance.get_transaction!(transaction.public_id, transaction.account)
       end
     end
   end
