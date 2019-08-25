@@ -13,6 +13,7 @@ defmodule BudgetSHWeb.Schema.Schema do
 
     @desc "Lists accounts"
     field :list_accounts, list_of(:account) do
+      arg(:user_accounts, :boolean)
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.list_accounts/3)
     end

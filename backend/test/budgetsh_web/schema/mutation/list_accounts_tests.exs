@@ -18,9 +18,10 @@ defmodule BudgetSHWeb.Schema.Mutation.ListAccountsTest do
     user
   end
 
-  def account_fixture(user) do
+  def account_fixture(user, attrs \\ %{}) do
     {:ok, account} =
-      %{name: "some name"}
+      attrs
+      |> Enum.into(%{name: "some name"})
       |> Finance.create_account(user)
 
     account
@@ -41,6 +42,36 @@ defmodule BudgetSHWeb.Schema.Mutation.ListAccountsTest do
                "listAccounts" => [
                  %{
                    "name" => "some name"
+                 }
+               ]
+             }
+           } = json_response(conn, 200)
+  end
+
+  test "list account with user accounts only returns user accounts" do
+    user = user_fixture()
+    session = BudgetSHWeb.AuthToken.sign(user)
+    _account = account_fixture(user)
+    _user_account = account_fixture(user, %{name: "user", user_account: true})
+
+    query = """
+    {
+      listAccounts(user_accounts: true) {
+        name
+      }
+    }
+    """
+
+    conn =
+      build_conn()
+      |> put_req_header("authorization", "Bearer #{session}")
+      |> get("/", query: query)
+
+    assert %{
+             "data" => %{
+               "listAccounts" => [
+                 %{
+                   "name" => "user"
                  }
                ]
              }

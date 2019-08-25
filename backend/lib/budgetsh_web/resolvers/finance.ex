@@ -12,11 +12,12 @@ defmodule BudgetSHWeb.Resolvers.Finance do
     end
   end
 
-  @spec list_accounts(any, any, %{context: %{current_user: map}}) ::
+  @spec list_accounts(any, %{}, %{context: %{current_user: map}}) ::
           {:ok, [%{name: binary, public_id: binary}]}
-  def list_accounts(_, _, %{context: %{current_user: user}}) do
+  def list_accounts(_, args, %{context: %{current_user: user}}) do
     accounts =
       Finance.list_accounts(user)
+      |> Enum.reject(fn account -> args[:user_accounts] && !account.user_account end)
       |> Enum.map(fn account -> %{name: account.name, public_id: account.public_id} end)
 
     {:ok, accounts}
