@@ -16,9 +16,10 @@ defmodule BudgetSH.FinanceTest do
     amount: "100",
     currency_code: "USD",
     transaction_date: Date.utc_today(),
-    tags: ["apple"]
+    tags: ["apple"],
+    type: :credit
   }
-  @invalid_transaction_attrs %{amount: "ABC", currency_code: "TEST"}
+  @invalid_transaction_attrs %{amount: "ABC", currency_code: "TEST", type: :not_real}
   @update_transaction_attrs %{
     amount: "1"
   }
@@ -150,7 +151,13 @@ defmodule BudgetSH.FinanceTest do
 
       assert [
                amount: {"must be numeric", [validation: :format]},
-               transaction_date: {"can't be blank", [validation: :required]}
+               transaction_date: {"can't be blank", [validation: :required]},
+               type:
+                 {"is invalid",
+                  [
+                    type: BudgetSH.Finance.Transaction.TransactionTypeEnum,
+                    validation: :cast
+                  ]}
              ] = changeset.errors
     end
 

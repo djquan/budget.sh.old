@@ -64,7 +64,7 @@ defmodule BudgetSH.Finance do
   @doc """
   Creates a transaction
   """
-  @spec create_transaction(%{}, %Account{}) :: %Transaction{}
+  @spec create_transaction(%{}, %Account{}) :: {:ok, %Transaction{}} | {:error, %Changeset{}}
   def create_transaction(attrs \\ %{}, account) do
     %Transaction{}
     |> Transaction.changeset(attrs)

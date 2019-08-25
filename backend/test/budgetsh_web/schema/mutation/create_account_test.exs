@@ -11,12 +11,11 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateAccountTest do
     }
   }
   """
-  @valid_attrs %{password: "some password", email: "username@example.com"}
 
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> Enum.into(@valid_attrs)
+      |> Enum.into(%{password: "some password", email: "username@example.com"})
       |> BudgetSH.Accounts.create_user()
 
     user

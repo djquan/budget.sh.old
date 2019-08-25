@@ -43,7 +43,8 @@ defmodule BudgetSH.MixProject do
       {:absinthe_phoenix, "~> 1.4.0"},
       {:argon2_elixir, "~> 2.0"},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false},
-      {:dataloader, "~> 1.0.0"}
+      {:dataloader, "~> 1.0.0"},
+      {:ecto_enum, "~> 1.3"}
     ]
   end
 
