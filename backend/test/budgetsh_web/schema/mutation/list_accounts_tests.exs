@@ -1,27 +1,35 @@
-defmodule BudgetSH.Scheam.Query.MeTest do
+defmodule BudgetSHWeb.Schema.Mutation.ListAccountsTest do
   use BudgetSHWeb.ConnCase, async: true
+  alias BudgetSH.Finance
 
   @query """
   {
-    me {
-      email
+    listAccounts {
+      name
     }
   }
   """
 
-  @valid_attrs %{password: "some password", email: "username@example.com"}
-  def user_fixture(attrs \\ %{}) do
+  def user_fixture() do
     {:ok, user} =
-      attrs
-      |> Enum.into(@valid_attrs)
+      %{password: "some password", email: "username@example.com"}
       |> BudgetSH.Accounts.create_user()
 
     user
   end
 
-  test "me returns email" do
+  def account_fixture(user) do
+    {:ok, account} =
+      %{name: "some name"}
+      |> Finance.create_account(user)
+
+    account
+  end
+
+  test "listAccounts returns all accounts associated with the signed in user" do
     user = user_fixture()
     session = BudgetSHWeb.AuthToken.sign(user)
+    _account = account_fixture(user)
 
     conn =
       build_conn()
@@ -30,25 +38,27 @@ defmodule BudgetSH.Scheam.Query.MeTest do
 
     assert %{
              "data" => %{
-               "me" => %{
-                 "email" => "username@example.com"
-               }
+               "listAccounts" => [
+                 %{
+                   "name" => "some name"
+                 }
+               ]
              }
            } = json_response(conn, 200)
   end
 
-  test "me returns an error if not signed in" do
+  test "listAccounts returns an error if not signed in" do
     conn = get build_conn(), "/", query: @query
 
     assert %{
              "data" => %{
-               "me" => nil
+               "listAccounts" => nil
              },
              "errors" => [
                %{
                  "locations" => [%{"column" => 0, "line" => 2}],
                  "message" => "Sign in before proceeding",
-                 "path" => ["me"]
+                 "path" => ["listAccounts"]
                }
              ]
            } = json_response(conn, 200)

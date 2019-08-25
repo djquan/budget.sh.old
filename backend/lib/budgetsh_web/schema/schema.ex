@@ -10,6 +10,12 @@ defmodule BudgetSHWeb.Schema.Schema do
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Accounts.me/3)
     end
+
+    @desc "Lists accounts"
+    field :list_accounts, list_of(:account) do
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Finance.list_accounts/3)
+    end
   end
 
   mutation do
