@@ -134,7 +134,7 @@ defmodule BudgetSH.FinanceTest do
       assert [transaction] = Finance.list_transactions(transaction.account)
     end
 
-    test "create_transaction/2 creates a transaction for a user and account" do
+    test "create_transaction/3 creates a transaction for a user and account" do
       account = account_fixture()
 
       assert {:ok, %Transaction{} = transaction} =
@@ -145,7 +145,27 @@ defmodule BudgetSH.FinanceTest do
       assert transaction.account == account
     end
 
-    test "create_transaction/2 with invalid data returns error changeset" do
+    test "create_transaction/3 creates a transaction for a user and account with a linked transaction" do
+      account = account_fixture()
+
+      assert {:ok, %Transaction{} = original_transaction} =
+               Finance.create_transaction(@valid_transaction_attrs, account)
+
+      assert {:ok, %Transaction{} = new_transaction} =
+               Finance.create_transaction(
+                 %{@valid_transaction_attrs | type: :debit},
+                 account,
+                 [original_transaction]
+               )
+
+      new_transaction = Repo.preload(new_transaction, [:account, :credits])
+      assert new_transaction.amount == "100"
+      assert new_transaction.account == account
+
+      assert [original_transaction] = new_transaction.credits
+    end
+
+    test "create_transaction/3 with invalid data returns error changeset" do
       assert {:error, changeset = %Ecto.Changeset{}} =
                Finance.create_transaction(@invalid_transaction_attrs, account_fixture())
 

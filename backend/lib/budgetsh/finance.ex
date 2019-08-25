@@ -65,11 +65,12 @@ defmodule BudgetSH.Finance do
   Creates a transaction
   """
   @spec create_transaction(%{}, %Account{}) :: {:ok, %Transaction{}} | {:error, %Changeset{}}
-  def create_transaction(attrs \\ %{}, account) do
+  def create_transaction(attrs \\ %{}, account, linked_transactions \\ []) do
     %Transaction{}
     |> Transaction.changeset(attrs)
     |> Changeset.put_assoc(:account, account)
     |> Changeset.put_change(:public_id, Ecto.UUID.generate())
+    |> link_transactions(linked_transactions)
     |> Repo.insert()
   end
 
@@ -110,4 +111,22 @@ defmodule BudgetSH.Finance do
   def delete_transaction(transaction) do
     Repo.delete(transaction)
   end
+
+  defp link_transactions(changeset, transactions = [_]) do
+    if Changeset.get_change(changeset, :type) == :credit do
+      changeset
+      |> Changeset.put_assoc(
+        :debits,
+        Enum.filter(transactions, fn txn -> txn.type == :debit end)
+      )
+    else
+      changeset
+      |> Changeset.put_assoc(
+        :credits,
+        Enum.filter(transactions, fn txn -> txn.type == :credit end)
+      )
+    end
+  end
+
+  defp link_transactions(changeset, []), do: changeset
 end

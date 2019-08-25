@@ -18,6 +18,17 @@ defmodule BudgetSH.Finance.Transaction do
     field :type, TransactionTypeEnum
 
     belongs_to :account, BudgetSH.Finance.Account
+
+    many_to_many(:credits, Transaction,
+      join_through: "credit_debit",
+      join_keys: [credit_id: :id, debit_id: :id]
+    )
+
+    many_to_many(:debits, Transaction,
+      join_through: "credit_debit",
+      join_keys: [credit_id: :id, debit_id: :id]
+    )
+
     timestamps()
   end
 
