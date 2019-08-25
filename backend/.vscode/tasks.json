@@ -42,7 +42,7 @@
     {
       "label": "test focused",
       "type": "shell",
-      "command": "echo -n ${relativeFile} > ${workspaceRoot}/.vscode/TEST_LAST && mix test ${relativeFile}:${lineNumber}",
+      "command": "echo -n ${relativeFile}:${lineNumber} > ${workspaceRoot}/.vscode/TEST_LAST && mix test ${relativeFile}:${lineNumber}",
       "problemMatcher": [
         "$mixCompileError",
         "$mixCompileWarning",

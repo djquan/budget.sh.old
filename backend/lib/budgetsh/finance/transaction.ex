@@ -21,15 +21,8 @@ defmodule BudgetSH.Finance.Transaction do
   def changeset(transaction, attrs) do
     transaction
     |> cast(attrs, [:amount, :currency_code, :tags, :transaction_date])
-    |> put_public_id_if_not_present
     |> validate_required([:amount, :currency_code, :transaction_date])
     |> validate_format(:amount, ~r/^\d+$/, message: "must be numeric")
-  end
-
-  @spec put_public_id_if_not_present(Ecto.Changeset.t()) :: Ecto.Changeset.t()
-  defp put_public_id_if_not_present(changeset) do
-    changeset
-    |> put_change(:public_id, get_field(changeset, :public_id, Ecto.UUID.generate()))
   end
 
   @spec account_scoped(%Account{}) :: Ecto.Query.t()

@@ -9,10 +9,6 @@ defmodule BudgetSHWeb.Resolvers.Accounts do
     {:ok, user}
   end
 
-  def me(_, _, _) do
-    {:ok, nil}
-  end
-
   @spec signup(any, %{}, any) ::
           {:error, [{:details, map} | {:message, <<_::192>>}, ...]}
           | {:ok, %{session: binary, user: %User{}}}

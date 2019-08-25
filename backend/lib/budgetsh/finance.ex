@@ -4,11 +4,13 @@ defmodule BudgetSH.Finance do
   """
 
   import Ecto.Query, warn: false
-  alias BudgetSH.Repo
 
+  alias BudgetSH.Repo
   alias BudgetSH.Finance.Account
   alias BudgetSH.Finance.Transaction
   alias BudgetSH.Accounts.User
+
+  alias Ecto.Changeset
 
   @spec list_accounts(%User{}) :: [%Account{}]
   def list_accounts(user) do
@@ -32,18 +34,19 @@ defmodule BudgetSH.Finance do
   @doc """
   Creates a account.
   """
-  @spec create_account(%{}, %User{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
+  @spec create_account(%{}, %User{}) :: {:ok, %Account{}} | {:error, %Changeset{}}
   def create_account(attrs \\ %{}, user) do
     %Account{}
     |> Account.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Changeset.put_assoc(:user, user)
+    |> Changeset.put_change(:public_id, Ecto.UUID.generate())
     |> Repo.insert()
   end
 
   @doc """
   Updates a account.
   """
-  @spec update_account(%Account{}, %{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
+  @spec update_account(%Account{}, %{}) :: {:ok, %Account{}} | {:error, %Changeset{}}
   def update_account(%Account{} = account, attrs) do
     account
     |> Account.changeset(attrs)
@@ -53,7 +56,7 @@ defmodule BudgetSH.Finance do
   @doc """
   Deletes a Account.
   """
-  @spec delete_account(%Account{}) :: {:ok, %Account{}} | {:error, %Ecto.Changeset{}}
+  @spec delete_account(%Account{}) :: {:ok, %Account{}} | {:error, %Changeset{}}
   def delete_account(%Account{} = account) do
     Repo.delete(account)
   end
@@ -65,7 +68,8 @@ defmodule BudgetSH.Finance do
   def create_transaction(attrs \\ %{}, account) do
     %Transaction{}
     |> Transaction.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:account, account)
+    |> Changeset.put_assoc(:account, account)
+    |> Changeset.put_change(:public_id, Ecto.UUID.generate())
     |> Repo.insert()
   end
 
@@ -102,7 +106,7 @@ defmodule BudgetSH.Finance do
   @doc """
   Deletes a transaction
   """
-  @spec delete_transaction(%Transaction{}) :: {:ok, %Transaction{}} | {:error, %Ecto.Changeset{}}
+  @spec delete_transaction(%Transaction{}) :: {:ok, %Transaction{}} | {:error, %Changeset{}}
   def delete_transaction(transaction) do
     Repo.delete(transaction)
   end

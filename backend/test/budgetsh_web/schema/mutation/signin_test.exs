@@ -11,6 +11,7 @@ defmodule BudgetSHWeb.Schema.Mutation.SigninTest do
     }
   }
   """
+
   test "signing in" do
     user_attrs = %{
       email: "test@example.com",

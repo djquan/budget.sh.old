@@ -84,6 +84,7 @@ defmodule BudgetSH.FinanceTest do
       account = Repo.preload(account, :user)
       assert account.name == "some name"
       assert account.user == user
+      assert account.public_id
     end
 
     test "create_account/2 with invalid data returns error changeset" do
