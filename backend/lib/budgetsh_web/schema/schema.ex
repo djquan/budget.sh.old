@@ -41,6 +41,32 @@ defmodule BudgetSHWeb.Schema.Schema do
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.create_account/3)
     end
+
+    @desc
+    field :create_transactions, list_of(:transaction) do
+      arg(:transactions, list_of(:transaction_input))
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Finance.create_transactions/3)
+    end
+  end
+
+  enum :transaction_type do
+    value(:credit)
+    value(:debit)
+  end
+
+  input_object :transaction_input do
+    field :account_id, non_null(:string)
+    field :transaction_date, non_null(:date)
+    field :amount, non_null(:string)
+    field :currency_code, non_null(:string)
+    field :tags, list_of(:string)
+    field :type, non_null(:transaction_type)
+  end
+
+  object :transaction do
+    field :amount, non_null(:string)
+    field :public_id, non_null(:string)
   end
 
   object :user do

@@ -1,5 +1,6 @@
 defmodule BudgetSHWeb.Resolvers.Finance do
   alias BudgetSH.Finance
+  alias BudgetSH.Finance.Transaction
   alias BudgetSH.Accounts.User
 
   @spec create_account(any, %{}, %{context: %{current_user: %User{}}}) ::
@@ -21,5 +22,23 @@ defmodule BudgetSHWeb.Resolvers.Finance do
       |> Enum.map(fn account -> %{name: account.name, public_id: account.public_id} end)
 
     {:ok, accounts}
+  end
+
+  @spec create_transactions(any, %{transactions: [%{account_id: binary}]}, %{
+          context: %{current_user: %User{}}
+        }) ::
+          {:ok, [%Transaction{}]}
+  def create_transactions(_, %{transactions: args}, %{context: %{current_user: user}}) do
+    transactions =
+      for arg <- args do
+        {account_id, arg} = Map.pop(arg, :account_id)
+
+        with account <- Finance.get_account!(account_id, user),
+             {:ok, transaction} <- Finance.create_transaction(arg, account) do
+          transaction
+        end
+      end
+
+    {:ok, transactions}
   end
 end
