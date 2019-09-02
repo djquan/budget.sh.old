@@ -1,4 +1,4 @@
-name: breath
+name: budgetsh
 on:
   push:
     branches:
