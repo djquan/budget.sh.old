@@ -83,5 +83,5 @@ jobs:
       - name: Deploy
         run: "kubectl apply -f kubernetes/application.yaml"
       - name: Wait for completion
-        run: "kubectl rollout -n breath status deployment/breath"
+        run: "kubectl rollout -n budgetsh status deployment/budgetsh"
         timeout-minutes: 8
