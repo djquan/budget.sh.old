@@ -22,56 +22,63 @@ spec:
         app: budgetsh
     spec:
       containers:
-      - name: budgetsh
-        image: reg.quan.io/dan/budgetsh:latest
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "300m"
-          limits:
-            memory: "550Mi"
-            cpu: "350m"
-        ports:
-        - containerPort: 4000
-        livenessProbe:
-          httpGet:
-            path: /ping
-            port: 4000
-          initialDelaySeconds: 45
-          successThreshold: 1
-          failureThreshold: 3
-        readinessProbe:
-          httpGet:
-            path: /ping
-            port: 4000
-          initialDelaySeconds: 0
-          successThreshold: 1
-          failureThreshold: 3
-        env:
-          - name: POSTGRES_HOST
-            valueFrom:
-              secretKeyRef:
-                name: postgres
-                key: postgres-host
-          - name: POSTGRES_PRODUCTION_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres
-                key: postgres-password
-          - name: SECRET_KEY_BASE
-            valueFrom:
-              secretKeyRef:
-                name: budgetsh
-                key: secret-key-base
-          - name: SESSION_SALT
-            valueFrom:
-              secretKeyRef:
-                name: budgetsh
-                key: session-salt
-          - name: POOL_SIZE
-            value: "5"
+        - name: budgetsh
+          image: reg.quan.io/dan/budgetsh:latest
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "300m"
+            limits:
+              memory: "550Mi"
+              cpu: "350m"
+          ports:
+            - containerPort: 4000
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 4000
+            initialDelaySeconds: 45
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 4000
+            initialDelaySeconds: 0
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: BEAM_PORT
+              value: 9001
+            - name: RELEASE_COOKIE
+              valueFrom:
+                secretKeyRef:
+                  name: release
+                  key: release_cookie
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: postgres-host
+            - name: POSTGRES_PRODUCTION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: postgres-password
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  name: budgetsh
+                  key: secret-key-base
+            - name: SESSION_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: budgetsh
+                  key: session-salt
+            - name: POOL_SIZE
+              value: "5"
       imagePullSecrets:
-        - name: regcred-reg-quan-io 
+        - name: regcred-reg-quan-io
 ---
 apiVersion: v1
 kind: Service
@@ -96,13 +103,13 @@ metadata:
     certmanager.k8s.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
-  - hosts:
-    - api.budget.sh
-    secretName: letsencrypt-prod
+    - hosts:
+        - api.budget.sh
+      secretName: letsencrypt-prod
   rules:
-  - host: api.budget.sh
-    http:
-      paths:
-      - backend:
-          serviceName: budgetsh-service
-          servicePort: 4000
+    - host: api.budget.sh
+      http:
+        paths:
+          - backend:
+              serviceName: budgetsh-service
+              servicePort: 4000
