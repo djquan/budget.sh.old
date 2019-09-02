@@ -1,0 +1,83 @@
+name: breath
+on:
+  push:
+    branches:
+      - master
+jobs:
+  test_backend:
+    runs-on: ubuntu-latest
+    container:
+      image: elixir:1.9.1-slim
+    services:
+      postgres:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v1
+      - run: cd backend
+      - name: Install Dependencies
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+      - name: Run Tests
+        run: |
+          mix ecto.reset
+          mix test
+        env:
+          MIX_ENV: test
+          POSTGRES_HOST: db
+          POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+      # - name: Dialyzer
+      #   run: mix dialyzer
+  # build_push_image:
+  #   runs-on: ubuntu-latest
+  #   needs: test
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - name: Login
+  #       uses: actions/docker/login@master
+  #       env:
+  #         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  #         DOCKER_REGISTRY_URL: reg.quan.io
+  #     - name: Build and Push
+  #       uses: actions/action-builder/docker@master
+  #       with:
+  #         entrypoint: make
+  #         args: build push
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build_push_image
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: azure/k8s-actions/setup-kubectl@master
+  #       with:
+  #         version: v1.15.3
+  #       env:
+  #         RUNNER_TEMPDIRECTORY: ${RUNNER_TEMP}
+  #         RUNNER_TOOLSDIRECTORY: ${RUNNER_TOOL_CACHE}
+  #     - uses: azure/k8s-actions/k8s-set-context@master
+  #       with:
+  #         kubeconfig: "${{ secrets.KUBECONFIG }}"
+  #     - name: Update SHAs
+  #       run: |
+  #         sed -ie "s/latest/$GITHUB_SHA/" kubernetes/application.yaml
+  #         sed -ie "s/latest/$GITHUB_SHA/" kubernetes/migrate_job.yaml
+  #     - name: Run migration
+  #       run: |
+  #         kubectl apply -f kubernetes/migrate_job.yaml
+  #         sleep 50
+  #         kubectl wait --for=condition=complete -f kubernetes/migrate_job.yaml
+  #         kubectl delete -f kubernetes/migrate_job.yaml
+  #     - name: Deploy
+  #       run: "kubectl apply -f kubernetes/application.yaml"
+  #     - name: Wait for completion
+  #       run: "kubectl rollout -n breath status deployment/breath"
+  #       timeout-minutes: 8
