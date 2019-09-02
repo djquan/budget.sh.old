@@ -1,7 +1,7 @@
 name: dialyzer
 on: push
 jobs:
-  test_backend:
+  dialyzer:
     runs-on: ubuntu-latest
     container:
       image: elixir:1.9.1-slim
