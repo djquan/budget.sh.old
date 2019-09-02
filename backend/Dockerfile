@@ -4,6 +4,7 @@ WORKDIR "/app"
 COPY . .
 
 ENV MIX_ENV=prod
+RUN mix deps.get
 RUN mix release --overwrite --force
 
 FROM alpine:3.9 AS app
