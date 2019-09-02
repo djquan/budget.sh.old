@@ -34,7 +34,7 @@ jobs:
           mix test
         env:
           MIX_ENV: test
-          POSTGRES_HOST: db
+          POSTGRES_HOST: postgres
           POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       # - name: Dialyzer
       #   run: mix dialyzer
