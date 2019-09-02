@@ -49,7 +49,7 @@ spec:
             failureThreshold: 3
           env:
             - name: BEAM_PORT
-              value: 9001
+              value: "9001"
             - name: RELEASE_COOKIE
               valueFrom:
                 secretKeyRef:
