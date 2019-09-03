@@ -14,6 +14,12 @@ defmodule BudgetSH.MixProject do
       elixirc_options: [warnings_as_errors: true],
       dialyzer: [
         plt_add_deps: :transitive
+      ],
+      releases: [
+        budgetsh: [
+          include_executables_for: [:unix],
+          applications: [runtime_tools: :permanent]
+        ]
       ]
     ]
   end
