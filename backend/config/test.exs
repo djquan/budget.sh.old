@@ -19,3 +19,10 @@ config :argon2_elixir,
   m_cost: 8
 
 config :budgetsh, :sessions, salt: "test salt"
+
+config :libcluster,
+  topologies: [
+    budgetsh: [
+      strategy: Cluster.Strategy.Epmd
+    ]
+  ]

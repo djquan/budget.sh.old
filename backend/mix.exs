@@ -44,7 +44,8 @@ defmodule BudgetSH.MixProject do
       {:argon2_elixir, "~> 2.0"},
       {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false},
       {:dataloader, "~> 1.0.0"},
-      {:ecto_enum, "~> 1.3"}
+      {:ecto_enum, "~> 1.3"},
+      {:libcluster, "~> 3.1"}
     ]
   end
 

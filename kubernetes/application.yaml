@@ -48,6 +48,10 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
             - name: BEAM_PORT
               value: "9001"
             - name: RELEASE_COOKIE

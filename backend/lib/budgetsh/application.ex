@@ -9,9 +9,8 @@ defmodule BudgetSH.Application do
   def start(_type, _args) do
     children = [
       BudgetSH.Repo,
-      BudgetSHWeb.Endpoint
-      # Starts a worker by calling: BudgetSH.Worker.start_link(arg)
-      # {BudgetSH.Worker, arg},
+      BudgetSHWeb.Endpoint,
+      {Cluster.Supervisor, [Application.get_env(:libcluster, :topologies)]}
     ]
 
     opts = [strategy: :one_for_one, name: BudgetSH.Supervisor]
