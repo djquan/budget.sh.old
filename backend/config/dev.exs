@@ -57,10 +57,3 @@ config :phoenix, :stacktrace_depth, 20
 config :phoenix, :plug_init_mode, :runtime
 
 config :budgetsh, :sessions, salt: "test salt"
-
-config :libcluster,
-  topologies: [
-    budgetsh: [
-      strategy: Cluster.Strategy.Epmd
-    ]
-  ]
