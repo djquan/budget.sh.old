@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: budgetsh
-          image: reg.quan.io/dan/budgetsh:latest
+          image: reg.quan.io/dan/budgetsh-backend:latest
           resources:
             requests:
               memory: "512Mi"

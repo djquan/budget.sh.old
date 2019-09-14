@@ -5,6 +5,8 @@ on:
       - master
     paths:
       - "backend/*"
+      - "kubernetes/backend.yaml"
+      - "kubernetes/migrate_job.yaml"
 jobs:
   test_backend:
     runs-on: ubuntu-latest
