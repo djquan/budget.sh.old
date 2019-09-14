@@ -1,4 +1,4 @@
-name: budgetsh
+name: budgetsh-backend
 on:
   push:
     branches:
