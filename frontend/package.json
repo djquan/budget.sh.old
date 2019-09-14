@@ -3,19 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@absinthe/socket-apollo-link": "^0.2.1",
-    "@jumpn/utils-graphql": "^0.6.0",
-    "apollo-cache-inmemory": "^1.6.3",
-    "apollo-client": "^2.6.4",
-    "apollo-link-context": "^1.0.19",
-    "apollo-link-http": "^1.5.16",
-    "graphql-tag": "^2.10.1",
-    "phoenix": "^1.4.10",
+    "@types/jest": "24.0.18",
+    "@types/node": "12.7.5",
+    "@types/react": "16.9.2",
+    "@types/react-dom": "16.9.0",
     "react": "^16.9.0",
-    "react-apollo": "^3.1.0",
     "react-dom": "^16.9.0",
-    "react-router-dom": "^5.0.1",
-    "react-scripts": "3.1.1"
+    "react-scripts": "3.1.1",
+    "typescript": "3.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
