@@ -21,6 +21,10 @@
 @import "~bootstrap/scss/utilities/display";
 @import "~bootstrap/scss/utilities/flex";
 @import "~bootstrap/scss/utilities/text";
+@import "./fontawesome/fontawesome.scss";
+@import "./fontawesome/solid.scss";
+
+$fa-font-path:        "./webfonts";
 
 header {
 	nav {
@@ -163,4 +167,10 @@ form.signin, form.signup {
 		font-weight: 300;
 		font-size: 1.15rem;
 	}
+}
+
+.spinner {
+
+  font-size: 7rem;
+  text-align: center;
 }
