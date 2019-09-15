@@ -3,14 +3,14 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "frontend/*"
-      - "frontend/*/*"
-      - "frontend/*/*/*"
-      - "frontend/*/*/*/*"
-      - "frontend/*/*/*/*/*"
-      - "frontend/*/*/*/*/*/*"
-      - "kubernetes/frontend.yaml"
+    # paths:
+    #   - "frontend/*"
+    #   - "frontend/*/*"
+    #   - "frontend/*/*/*"
+    #   - "frontend/*/*/*/*"
+    #   - "frontend/*/*/*/*/*"
+    #   - "frontend/*/*/*/*/*/*"
+    #   - "kubernetes/frontend.yaml"
 jobs:
   build_push_image:
     runs-on: ubuntu-latest

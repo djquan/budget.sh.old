@@ -3,13 +3,13 @@ on:
   push:
     branches:
       - master
-    paths:
-      - "backend/*"
-      - "backend/*/*"
-      - "backend/*/*/*"
-      - "backend/*/*/*/*"
-      - "backend/*/*/*/*/*"
-      - "backend/*/*/*/*/*/*"
+    # paths:
+    #   - "backend/*"
+    #   - "backend/*/*"
+    #   - "backend/*/*/*"
+    #   - "backend/*/*/*/*"
+    #   - "backend/*/*/*/*/*"
+    #   - "backend/*/*/*/*/*/*"
 jobs:
   dialyzer:
     runs-on: ubuntu-latest
