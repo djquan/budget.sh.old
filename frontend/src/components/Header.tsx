@@ -15,9 +15,6 @@ const Header: React.FC = () => (
             {currentUser && (
               <>
                 <li><SignOut /></li>
-                <li className="user"><i className="far fa-user" />
-                  {currentUser.email}
-                </li>
               </>
             )}
             {!currentUser && (

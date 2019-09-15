@@ -3,7 +3,6 @@ ENV NODE_PATH=/app/node_modules
 ENV PATH=$PATH:/app/node_modules/.bin
 WORKDIR /app
 COPY package* /app/
-COPY node_modules /app/
 RUN npm install
 
 COPY . /app/
