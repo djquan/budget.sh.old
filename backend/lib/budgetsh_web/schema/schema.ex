@@ -7,7 +7,6 @@ defmodule BudgetSHWeb.Schema.Schema do
   query do
     @desc "Get info on the currently logged in user"
     field :me, :user do
-      middleware(Middleware.Authenticate)
       resolve(&Resolvers.Accounts.me/3)
     end
 

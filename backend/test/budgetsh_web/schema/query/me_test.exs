@@ -37,20 +37,13 @@ defmodule BudgetSH.Scheam.Query.MeTest do
            } = json_response(conn, 200)
   end
 
-  test "me returns an error if not signed in" do
+  test "me returns nil if not signed in" do
     conn = get build_conn(), "/", query: @query
 
     assert %{
              "data" => %{
                "me" => nil
-             },
-             "errors" => [
-               %{
-                 "locations" => [%{"column" => 0, "line" => 2}],
-                 "message" => "Sign in before proceeding",
-                 "path" => ["me"]
-               }
-             ]
+             }
            } = json_response(conn, 200)
   end
 end
