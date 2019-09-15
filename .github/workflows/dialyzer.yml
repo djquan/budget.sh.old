@@ -3,6 +3,11 @@ on:
   push:
     paths:
       - "backend/*"
+      - "backend/*/*"
+      - "backend/*/*/*"
+      - "backend/*/*/*/*"
+      - "backend/*/*/*/*/*"
+      - "backend/*/*/*/*/*/*"
 jobs:
   dialyzer:
     runs-on: ubuntu-latest
