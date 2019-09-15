@@ -26,7 +26,7 @@ class CurrentUser extends Component<Props> {
     return (
       <Query query={GET_CURRENT_USER_QUERY}>
         {({ data, loading, error }: QueryResult) => {
-          if (error) return Error(error);
+          if (error) return this.props.children(null);
           if (loading) return <Loading />;
           return this.props.children(data.me);
         }}

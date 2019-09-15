@@ -4,10 +4,20 @@ import { ApolloError } from "apollo-client";
 const Error = (error: ApolloError) => {
   if (!error) return <></>;
 
-  const hasGraphQLErrors = error.graphQLErrors && error.graphQLErrors.length;
   let errorMessage;
 
-  if (hasGraphQLErrors) {
+  if (error.networkError) {
+    errorMessage = (
+      <>
+        <h3>Internal Server Error</h3>
+        <code>
+          Something is wrong.
+        </code>
+      </>
+    );
+  }
+
+  if (error.graphQLErrors && error.graphQLErrors.length > 0) {
     errorMessage = (
       <>
         <ul>
