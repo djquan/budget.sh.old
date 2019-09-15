@@ -70,7 +70,6 @@ class SignIn extends Component<Props> {
                 e.preventDefault();
                 signin();
               }}>
-              <h2>Sign In</h2>
               {Error(error)}
               <fieldset>
                 <label htmlFor="email">Email</label>
