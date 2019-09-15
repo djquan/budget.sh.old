@@ -46,5 +46,5 @@ defmodule BudgetSHWeb.Endpoint do
     signing_salt: "+qMp+JoI"
   )
 
-  plug(BudgetSHWeb.Router)
+  plug(BudgetSHWeb.Router, origin: "*")
 end
