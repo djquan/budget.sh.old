@@ -106,7 +106,7 @@ spec:
   tls:
     - hosts:
         - api.budget.sh
-      secretName: letsencrypt-prod
+      secretName: letsencrypt-prod-backend
   rules:
     - host: api.budget.sh
       http:

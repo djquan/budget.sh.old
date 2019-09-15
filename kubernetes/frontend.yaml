@@ -1,0 +1,88 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: budgetsh-frontend
+  namespace: budgetsh
+spec:
+  selector:
+    matchLabels:
+      app: budgetsh-frontend
+  replicas: 2
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: budgetsh-frontend
+    spec:
+      containers:
+        - name: budgetsh-frontend
+          image: reg.quan.io/dan/budgetsh-frontend:latest
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "300m"
+            limits:
+              memory: "350Mi"
+              cpu: "350m"
+          ports:
+            - containerPort: 80
+          env:
+            - name: NODE_ENV
+              value: "production"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 45
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 0
+            successThreshold: 1
+            failureThreshold: 3
+      imagePullSecrets:
+        - name: regcred-reg-quan-io
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budgetsh-frontend-service
+  namespace: budgetsh
+spec:
+  selector:
+    app: budgetsh-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      name: web
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: budgetsh-frontend-ingress
+  namespace: budgetsh
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    certmanager.k8s.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+        - budget.sh
+      secretName: letsencrypt-prod-frontend
+  rules:
+    - host: budget.sh
+      http:
+        paths:
+          - backend:
+              serviceName: budgetsh-frontend-service
+              servicePort: 80
