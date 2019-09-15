@@ -71,9 +71,6 @@ class SignUp extends Component<Props> {
                 signup();
               }}>
               <h2>Sign Up</h2>
-              <h3>
-                <Link to="/sign-in">Have an account?</Link>
-              </h3>
               {Error(error)}
               <fieldset>
                 <label htmlFor="email">Email</label>

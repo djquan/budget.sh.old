@@ -71,9 +71,6 @@ class SignIn extends Component<Props> {
                 signin();
               }}>
               <h2>Sign In</h2>
-              <h3>
-                <Link to="/sign-up">Don't have an account?</Link>
-              </h3>
               {Error(error)}
               <fieldset>
                 <label htmlFor="email">Email</label>
