@@ -1,4 +1,4 @@
-name: budgetsh-frontend
+name: frontend
 on:
   push:
     branches:

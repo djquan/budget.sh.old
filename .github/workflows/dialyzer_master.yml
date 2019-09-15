@@ -1,6 +1,8 @@
 name: dialyzer
 on:
   push:
+    branches:
+      - master
     paths:
       - "backend/*"
       - "backend/*/*"
