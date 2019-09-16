@@ -53,9 +53,8 @@ jobs:
       - name: Login
         uses: actions/docker/login@master
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_REGISTRY_URL: reg.quan.io
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build and Push
         uses: actions/action-builder/docker@master
         with:

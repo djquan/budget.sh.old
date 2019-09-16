@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: budgetsh
-          image: reg.quan.io/dan/budgetsh-backend:latest
+          image: djquan/budget.sh-backend:latest
           resources:
             requests:
               memory: "512Mi"
@@ -78,8 +78,6 @@ spec:
                   key: session-salt
             - name: POOL_SIZE
               value: "5"
-      imagePullSecrets:
-        - name: regcred-reg-quan-io
 ---
 apiVersion: v1
 kind: Service
