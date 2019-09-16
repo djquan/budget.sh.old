@@ -76,9 +76,16 @@ spec:
   tls:
     - hosts:
         - budget.sh
+        - www.budget.sh
       secretName: letsencrypt-prod-frontend
   rules:
     - host: budget.sh
+      http:
+        paths:
+          - backend:
+              serviceName: budgetsh-frontend-service
+              servicePort: 80
+    - host: www.budget.sh
       http:
         paths:
           - backend:
