@@ -71,11 +71,6 @@ spec:
                 secretKeyRef:
                   name: budgetsh
                   key: secret-key-base
-            - name: SESSION_SALT
-              valueFrom:
-                secretKeyRef:
-                  name: budgetsh
-                  key: session-salt
             - name: POOL_SIZE
               value: "5"
 ---

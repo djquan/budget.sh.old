@@ -7,7 +7,8 @@ defmodule BudgetSHWeb.AuthToken do
   """
   @spec sign(%User{}) :: String.t()
   def sign(user) do
-    session_salt = Application.get_env(:budgetsh, :sessions)[:salt]
+    session_salt = Application.get_env(:budgetsh, BudgetSHWeb.Endpoint)[:secret_key_base]
+
     Phoenix.Token.sign(BudgetSHWeb.Endpoint, session_salt, %{id: user.id})
   end
 
@@ -17,7 +18,7 @@ defmodule BudgetSHWeb.AuthToken do
   """
   @spec verify(String.t()) :: {:ok, %User{}} | {:error, String.t()}
   def verify(token) do
-    session_salt = Application.get_env(:budgetsh, :sessions)[:salt]
+    session_salt = Application.get_env(:budgetsh, BudgetSHWeb.Endpoint)[:secret_key_base]
 
     Phoenix.Token.verify(BudgetSHWeb.Endpoint, session_salt, token, max_age: 30 * :timer.hours(24))
   end

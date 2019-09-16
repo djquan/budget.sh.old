@@ -16,7 +16,3 @@ config :budgetsh, BudgetSHWeb.Endpoint,
   http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
   secret_key_base: secret_key_base,
   server: true
-
-session_salt = System.fetch_env!("SESSION_SALT")
-
-config :budgetsh, :sessions, salt: session_salt
