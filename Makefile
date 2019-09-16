@@ -1,5 +1,5 @@
 BACKEND_IMAGE := reg.quan.io/dan/budgetsh-backend
-FRONTEND_IMAGE := reg.quan.io/dan/budgetsh-frontend
+FRONTEND_IMAGE := djquan/budget.sh-frontend
 GITHUB_SHA ?= $(shell git rev-parse HEAD)
 
 build-backend:

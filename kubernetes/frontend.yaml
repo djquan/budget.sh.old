@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: budgetsh-frontend
-          image: reg.quan.io/dan/budgetsh-frontend:latest
+          image: djquan/budget.sh-frontend:latest
           resources:
             requests:
               memory: "300Mi"
@@ -50,8 +50,6 @@ spec:
             initialDelaySeconds: 0
             successThreshold: 1
             failureThreshold: 3
-      imagePullSecrets:
-        - name: regcred-reg-quan-io
 ---
 apiVersion: v1
 kind: Service
