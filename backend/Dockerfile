@@ -1,7 +1,4 @@
-FROM elixir:1.9-alpine AS build
-RUN apk add --update build-base npm git bash openssl
-RUN mix local.hex --force
-RUN mix local.rebar --force
+FROM djquan/elixir:1.9 AS build
 WORKDIR "/app"
 COPY . .
 ENV MIX_ENV=prod
