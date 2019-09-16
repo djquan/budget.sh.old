@@ -4,13 +4,14 @@ on:
     branches:
       - master
     paths:
-      # - "frontend/*"
-      # - "frontend/*/*"
-      # - "frontend/*/*/*"
-      # - "frontend/*/*/*/*"
-      # - "frontend/*/*/*/*/*"
-      # - "frontend/*/*/*/*/*/*"
-      # - "kubernetes/frontend.yaml"
+      - "frontend/*"
+      - "frontend/*/*"
+      - "frontend/*/*/*"
+      - "frontend/*/*/*/*"
+      - "frontend/*/*/*/*/*"
+      - "frontend/*/*/*/*/*/*"
+      - "kubernetes/frontend.yaml"
+      - ".github/workflows/frontend_master.yml"
 jobs:
   build_push_image:
     runs-on: ubuntu-latest
