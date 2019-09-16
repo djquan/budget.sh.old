@@ -1,4 +1,4 @@
-FROM elixir:1.9-alpine
+FROM elixir:1.9-alpine AS build
 RUN apk add --update build-base npm git bash openssl
 RUN mix local.hex --force
 RUN mix local.rebar --force
@@ -8,7 +8,7 @@ ENV MIX_ENV=prod
 RUN mix deps.get
 RUN mix release --overwrite --force
 
-FROM alpine:3.9 AS app
+FROM alpine:3.10 AS app
 RUN apk add --update bash openssl
 RUN mkdir /app
 WORKDIR /app
