@@ -9,3 +9,29 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+alias BudgetSH.Repo
+alias BudgetSH.Finance
+alias BudgetSH.Finance.Account
+alias BudgetSH.Finance.Transaction
+
+{:ok, user} =
+  %{password: "hunter2", email: "test@budget.sh"}
+  |> BudgetSH.Accounts.create_user()
+
+{:ok, _} =
+  %{name: "Test Account 1"}
+  |> Finance.create_account(user)
+
+{:ok, account} =
+  %{name: "Test Account 2"}
+  |> Finance.create_account(user)
+
+{:ok, transaction} =
+  %{
+    amount: "100",
+    currency_code: "USD",
+    transaction_date: Date.utc_today(),
+    tags: ["apple"],
+    type: :credit
+  }
+  |> Finance.create_transaction(account)
