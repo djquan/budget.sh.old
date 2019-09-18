@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from "./components/Header"
-import AccountSidebar from "./components/AccountSidebar"
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./assets/app.scss"
 import SignUp from "./pages/SignUp"

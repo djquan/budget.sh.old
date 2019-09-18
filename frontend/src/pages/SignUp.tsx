@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
-import { Link } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { GET_CURRENT_USER_QUERY } from "../components/CurrentUser";
 
 import Error from "../components/Error"
@@ -18,11 +18,7 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-export interface Props {
-  history: any
-}
-
-class SignUp extends Component<Props> {
+class SignUp extends Component<RouteComponentProps> {
   state = {
     email: "",
     password: ""
@@ -92,7 +88,7 @@ class SignUp extends Component<Props> {
                 />
                 <button type="submit" disabled={!this.isFormValid()}>
                   Sign Up
-                                </button>
+                </button>
               </fieldset>
             </form>
           );

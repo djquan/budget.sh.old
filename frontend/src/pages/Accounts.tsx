@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import AccountSidebar from "../components/AccountSidebar";
 import AccountList from "../components/AccountList"
-import { NavLink } from "react-router-dom";
 
-export interface Props {
-  match: any
+interface Props {
+  match: {
+    params: {
+      public_id: string
+    }
+  }
+}
+
+export interface Account {
+  name: string,
+  public_id: string
 }
 
 class Accounts extends Component<Props> {
@@ -12,7 +20,7 @@ class Accounts extends Component<Props> {
     const { public_id } = this.props.match.params;
     return (
       <AccountList>
-        {accountList => (
+        {(accountList: Account[]) => (
           <div>
             {accountList && (
               <>

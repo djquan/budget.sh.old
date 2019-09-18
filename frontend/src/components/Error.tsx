@@ -3,9 +3,7 @@ import { ApolloError } from "apollo-client";
 
 const Error = (error: ApolloError) => {
   if (!error) return <></>;
-
   let errorMessage;
-
   if (error.networkError) {
     errorMessage = (
       <>
@@ -16,7 +14,6 @@ const Error = (error: ApolloError) => {
       </>
     );
   }
-
   if (error.graphQLErrors && error.graphQLErrors.length > 0) {
     errorMessage = (
       <>
@@ -39,7 +36,6 @@ const Error = (error: ApolloError) => {
       </>
     );
   }
-
   return <div className="errors">{errorMessage}</div>;
 };
 

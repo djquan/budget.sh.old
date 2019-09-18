@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { withRouter, RouteComponentProps } from "react-router";
 import { withApollo, WithApolloClient } from "react-apollo";
 
-export interface State { }
-
 type Props = WithApolloClient<RouteComponentProps>;
 
 class SignOut extends Component<Props> {

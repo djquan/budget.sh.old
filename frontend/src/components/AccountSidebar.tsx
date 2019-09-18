@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Account } from "../pages/Accounts"
 
-export interface Props {
-  accounts: any
+interface Props {
+  accounts: Account[]
 }
 
 class AccountSidebar extends Component<Props> {
@@ -12,7 +13,7 @@ class AccountSidebar extends Component<Props> {
       <div className="bg-light border-right" id="sidebar-wrapper">
         <div className="sidebar-heading">Accounts</div>
         <div className="list-group list-group-flush">
-          {accountList.map((account: any) =>
+          {accountList.map((account: Account) =>
             <Link
               className="list-group-item list-group-item-action bg-light"
               to={"/accounts/" + account.public_id}
