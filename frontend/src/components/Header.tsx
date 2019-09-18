@@ -14,6 +14,7 @@ const Header: React.FC = () => (
           <ul>
             {currentUser && (
               <>
+                <li><NavLink to="/Accounts">Accounts</NavLink></li>
                 <li><SignOut /></li>
               </>
             )}

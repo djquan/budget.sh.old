@@ -1,26 +1,4 @@
-@import "~bootstrap/scss/functions";
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
-@import "~bootstrap/scss/navbar";
-@import "~bootstrap/scss/reboot";
-@import "~bootstrap/scss/type";
-@import "~bootstrap/scss/images";
-@import "~bootstrap/scss/code";
-@import "~bootstrap/scss/grid";
-@import "~bootstrap/scss/forms";
-@import "~bootstrap/scss/custom-forms";
-@import "~bootstrap/scss/buttons";
-@import "~bootstrap/scss/card";
-@import "~bootstrap/scss/badge";
-@import "~bootstrap/scss/utilities/background";
-@import "~bootstrap/scss/navbar";
-@import "~bootstrap/scss/nav";
-@import "~bootstrap/scss/input-group";
-@import "~bootstrap/scss/list-group";
-@import "~bootstrap/scss/utilities/spacing";
-@import "~bootstrap/scss/utilities/display";
-@import "~bootstrap/scss/utilities/flex";
-@import "~bootstrap/scss/utilities/text";
+@import "~bootstrap/scss/bootstrap";
 @import "./fontawesome/fontawesome.scss";
 @import "./fontawesome/solid.scss";
 
@@ -28,7 +6,6 @@ $fa-font-path:        "./webfonts";
 
 header {
 	nav {
-		margin-bottom: 3rem;
 		@extend 
 			.navbar, 
 			.navbar-expand,
@@ -173,4 +150,43 @@ form.signin, form.signup {
 
   font-size: 7rem;
   text-align: center;
+}
+
+// #content {
+//   // @extend .container-fluid;
+
+
+// }
+
+body {
+  overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+  min-height: 100vh;
+  margin-left: -15rem;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+  width: 15rem;
+}
+
+#page-content-wrapper {
+  min-width: 100vw;
+}
+
+@media (min-width: 768px) {
+  #sidebar-wrapper {
+    margin-left: 0;
+  }
+
+  #page-content-wrapper {
+    min-width: 0;
+    width: 100%;
+  }
 }
