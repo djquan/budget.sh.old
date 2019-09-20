@@ -22,7 +22,8 @@ defmodule BudgetSH.AccountsTest do
   describe "list_users/0" do
     test "list_users/0 returns all users" do
       user = user_fixture()
-      assert [_, user] = Accounts.list_users()
+      [_, retrieved_user] = Accounts.list_users()
+      assert user == retrieved_user
     end
   end
 

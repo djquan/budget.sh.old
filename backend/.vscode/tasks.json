@@ -52,7 +52,7 @@
     },
     {
       "label": "test last",
-      "command": "mix test $(cat ${workspaceRoot}/.vscode/TEST_LAST)",
+      "command": "mix test (cat ${workspaceRoot}/.vscode/TEST_LAST)",
       "type": "shell",
       "problemMatcher": [
         "$mixCompileError",
