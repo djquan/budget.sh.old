@@ -11,6 +11,7 @@ const LIST_ACCOUNTS_QUERY = gql`
     listAccounts {
       name
       id
+      userAccount
     }
   }
 `;

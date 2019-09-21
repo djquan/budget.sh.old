@@ -13,7 +13,7 @@ class AccountSidebar extends Component<Props> {
       <div className="bg-light border-right" id="sidebar-wrapper">
         <div className="sidebar-heading">Accounts</div>
         <div className="list-group list-group-flush">
-          {accountList.map((account: Account) =>
+          {accountList.filter((account: Account) => account.userAccount == true).map((account: Account) =>
             <Link
               className="list-group-item list-group-item-action bg-light"
               to={"/accounts/" + account.id}

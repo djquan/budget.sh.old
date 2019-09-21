@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AccountSidebar from "../components/AccountSidebar";
 import AccountList from "../components/AccountList"
+import AccountDetail from "../components/AccountDetail"
 
 interface Props {
   match: {
@@ -12,7 +13,8 @@ interface Props {
 
 export interface Account {
   name: string,
-  id: string
+  id: string,
+  userAccount: boolean
 }
 
 class Accounts extends Component<Props> {
@@ -36,8 +38,7 @@ class Accounts extends Component<Props> {
                       )}
                       {id && (
                         <>
-                          <h1 className="mt-4">{id}</h1>
-                          <p>{id}</p>
+                          <AccountDetail id={id} />
                         </>
                       )}
                     </div>
