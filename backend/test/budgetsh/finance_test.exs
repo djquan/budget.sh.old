@@ -24,6 +24,15 @@ defmodule BudgetSH.FinanceTest do
     amount: "1"
   }
 
+  def account_fixture_for_user(user, attrs \\ %{}) do
+    {:ok, account} =
+      attrs
+      |> Enum.into(@valid_account_attrs)
+      |> Finance.create_account(user)
+
+    account
+  end
+
   def account_fixture(attrs \\ %{}, user_attrs \\ %{}) do
     {:ok, account} =
       attrs
@@ -43,12 +52,15 @@ defmodule BudgetSH.FinanceTest do
   end
 
   def transaction_fixture(attrs \\ %{}, account_attrs \\ %{}, user_attrs \\ %{}) do
-    {:ok, transaction} =
+    account = account_fixture(account_attrs, user_attrs)
+
+    attrs =
       attrs
       |> Enum.into(@valid_transaction_attrs)
-      |> Finance.create_transaction(account_fixture(account_attrs, user_attrs))
+      |> Map.put(:account_id, account.id)
 
-    transaction
+    {:ok, transaction} = Finance.create_transactions([attrs])
+    transaction |> Repo.preload(account: :user)
   end
 
   describe "accounts" do
@@ -129,40 +141,42 @@ defmodule BudgetSH.FinanceTest do
       assert [transaction] = Finance.list_transactions(transaction.account)
     end
 
-    test "create_transaction/3 creates a transaction for a user and account" do
+    test "create_transactions/1 creates a transaction" do
       account = account_fixture()
 
       assert {:ok, %Transaction{} = transaction} =
-               Finance.create_transaction(@valid_transaction_attrs, account)
+               Finance.create_transactions([
+                 Map.put(@valid_transaction_attrs, :account_id, account.id)
+               ])
 
-      transaction = Repo.preload(transaction, :account)
+      transaction = Repo.preload(transaction, account: :user)
       assert transaction.amount == "100"
       assert transaction.account == account
     end
 
-    test "create_transaction/3 creates a transaction for a user and account with a linked transaction" do
-      account = account_fixture()
+    test "create_transactions/1 creates a transaction with linked transactions" do
+      user = user_fixture()
+      visa = account_fixture_for_user(user, %{name: "Visa", user_account: true})
+      chipotle = account_fixture_for_user(user, %{name: "Chiptole"})
 
-      assert {:ok, %Transaction{} = original_transaction} =
-               Finance.create_transaction(@valid_transaction_attrs, account)
+      assert {:ok, %Transaction{} = transaction} =
+               Finance.create_transactions([
+                 Map.put(%{@valid_transaction_attrs | type: :credit}, :account_id, visa.id),
+                 Map.put(%{@valid_transaction_attrs | type: :debit}, :account_id, chipotle.id)
+               ])
 
-      assert {:ok, %Transaction{} = new_transaction} =
-               Finance.create_transaction(
-                 %{@valid_transaction_attrs | type: :debit},
-                 account,
-                 [original_transaction]
-               )
-
-      new_transaction = Repo.preload(new_transaction, [:account, :credits])
-      assert new_transaction.amount == "100"
-      assert new_transaction.account == account
-
-      assert [original_transaction] = new_transaction.credits
+      transaction = Repo.preload(transaction, [:debits, :credits, account: :user])
+      assert transaction.amount == "100"
+      assert transaction.account == visa
+      assert length(transaction.debits) == 1
+      assert length(transaction.credits) == 0
     end
 
-    test "create_transaction/3 with invalid data returns error changeset" do
+    test "create_transactions/1 with invalid data returns error changeset" do
       assert {:error, changeset = %Ecto.Changeset{}} =
-               Finance.create_transaction(@invalid_transaction_attrs, account_fixture())
+               Finance.create_transactions([
+                 Map.put(@invalid_transaction_attrs, :account_id, account_fixture().id)
+               ])
 
       assert [
                amount: {"must be numeric", [validation: :format]},

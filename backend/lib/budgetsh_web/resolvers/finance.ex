@@ -43,16 +43,16 @@ defmodule BudgetSHWeb.Resolvers.Finance do
         }) ::
           {:ok, [%Transaction{}]}
   def create_transactions(_, %{transactions: args}, %{context: %{current_user: user}}) do
-    transactions =
-      for arg <- args do
-        {account_id, arg} = Map.pop(arg, :account_id)
+    unknown_accounts =
+      Enum.filter(args, fn arg ->
+        !Finance.get_account(arg.account_id, user)
+      end)
+      |> Enum.map(fn arg -> arg.account_id end)
 
-        with account <- Finance.get_account(account_id, user),
-             {:ok, transaction} <- Finance.create_transaction(arg, account) do
-          transaction
-        end
-      end
-
-    {:ok, transactions}
+    if length(unknown_accounts) > 0 do
+      {:error, "Cannot find account #{Enum.join(unknown_accounts, ",")}"}
+    else
+      Finance.create_transactions(args)
+    end
   end
 end

@@ -27,7 +27,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
     account
   end
 
-  test "it creates linked transactions do" do
+  test "it creates linked transactions" do
     user = user_fixture()
     session = BudgetSHWeb.AuthToken.sign(user)
     visa = account_fixture(user, %{name: "Visa", user_account: true})
@@ -63,16 +63,15 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
 
     assert %{
              "data" => %{
-               "createTransactions" => [
-                 %{
-                   "id" => _id
-                 },
-                 %{
-                   "id" => _id_2
-                 }
-               ]
+               "createTransactions" => %{
+                 "id" => id
+               }
              }
            } = json_response(conn, 200)
+
+    transaction_1 = Finance.get_transaction!(id, visa) |> BudgetSH.Repo.preload(:debits)
+
+    assert length(transaction_1.debits) == 1
   end
 
   test "requires login" do

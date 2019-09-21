@@ -30,14 +30,17 @@ defmodule BudgetSHWeb.Schema.Mutation.GetAccountTest do
 
   def transaction_fixture(account) do
     {:ok, transaction} =
-      %{
-        amount: "100",
-        currency_code: "USD",
-        transaction_date: Date.utc_today(),
-        tags: ["apple"],
-        type: :credit
-      }
-      |> Finance.create_transaction(account)
+      [
+        %{
+          amount: "100",
+          currency_code: "USD",
+          transaction_date: Date.utc_today(),
+          tags: ["apple"],
+          type: :credit,
+          account_id: account.id
+        }
+      ]
+      |> Finance.create_transactions()
 
     transaction
   end

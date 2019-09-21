@@ -51,7 +51,7 @@ defmodule BudgetSHWeb.Schema.Schema do
     end
 
     @desc
-    field :create_transactions, list_of(:transaction) do
+    field :create_transactions, :transaction do
       arg(:transactions, list_of(:transaction_input))
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.create_transactions/3)

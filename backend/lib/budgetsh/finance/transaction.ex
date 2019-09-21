@@ -14,7 +14,6 @@ defmodule BudgetSH.Finance.Transaction do
     field :amount, :string
     field :currency_code, :string
     field :tags, {:array, :string}
-    field :linked_transaction_id, :id
     field :transaction_date, :date
     field :type, TransactionTypeEnum
 
@@ -27,16 +26,16 @@ defmodule BudgetSH.Finance.Transaction do
 
     many_to_many(:debits, Transaction,
       join_through: "credit_debit",
-      join_keys: [credit_id: :id, debit_id: :id]
+      join_keys: [debit_id: :id, credit_id: :id]
     )
 
     timestamps()
   end
 
-  @spec changeset(%Transaction{}, %{}) :: Ecto.Changeset.t()
+  @spec changeset(%Transaction{}, %{id: binary} | %{}) :: Ecto.Changeset.t()
   def changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, [:amount, :currency_code, :tags, :transaction_date, :type])
+    |> cast(attrs, [:amount, :currency_code, :tags, :transaction_date, :type, :id, :account_id])
     |> validate_required([:amount, :currency_code, :transaction_date, :type])
     |> validate_format(:amount, ~r/^\d+$/, message: "must be numeric")
   end

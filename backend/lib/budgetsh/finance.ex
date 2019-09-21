@@ -60,15 +60,19 @@ defmodule BudgetSH.Finance do
     Repo.delete(account)
   end
 
-  @doc """
-  Creates a transaction
-  """
-  @spec create_transaction(%{}, %Account{}) :: {:ok, %Transaction{}} | {:error, %Changeset{}}
-  def create_transaction(attrs \\ %{}, account, linked_transactions \\ []) do
-    %Transaction{}
-    |> Transaction.changeset(attrs)
-    |> Changeset.put_assoc(:account, account)
-    |> link_transactions(linked_transactions)
+  def create_transactions(args) do
+    # changeset = %Transaction{}
+    #   |> Transaction.changeset(Map.put(hd, :id, Ecto.UUID.generate())
+
+    [changeset | linked_changeset] =
+      args
+      |> Enum.map(fn arg ->
+        %Transaction{}
+        |> Transaction.changeset(Map.put(arg, :id, Ecto.UUID.generate()))
+      end)
+
+    changeset
+    |> link_transactions(linked_changeset)
     |> Repo.insert()
   end
 
@@ -116,18 +120,6 @@ defmodule BudgetSH.Finance do
     Dataloader.Ecto.new(Repo, query: &query/2)
   end
 
-  # def query(Booking, %{limit: limit, scope: :place}) do
-  #   Booking
-  #   |> where(state: "reserved")
-  #   |> order_by(asc: :start_date)
-  #   |> limit(^limit)
-  # end
-
-  # def query(Booking, %{scope: :user}) do
-  #   Booking
-  #   |> order_by(asc: :start_date)
-  # end
-
   def query(Transaction, %{limit: limit}) do
     Transaction
     |> limit(^limit)
@@ -137,18 +129,22 @@ defmodule BudgetSH.Finance do
     queryable
   end
 
-  defp link_transactions(changeset, transactions = [_]) do
+  defp link_transactions(changeset, linked_changesets = [_]) do
     if Changeset.get_change(changeset, :type) == :credit do
       changeset
       |> Changeset.put_assoc(
         :debits,
-        Enum.filter(transactions, fn txn -> txn.type == :debit end)
+        Enum.filter(linked_changesets, fn linked ->
+          Changeset.get_change(linked, :type) == :debit
+        end)
       )
     else
       changeset
       |> Changeset.put_assoc(
         :credits,
-        Enum.filter(transactions, fn txn -> txn.type == :credit end)
+        Enum.filter(linked_changesets, fn linked ->
+          Changeset.get_change(linked, :type) == :credit
+        end)
       )
     end
   end
