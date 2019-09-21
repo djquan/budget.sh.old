@@ -15,7 +15,7 @@ const App: React.FC = () => {
           <Switch>
             <Route path="/sign-up" component={SignUp} />
             <Route path="/sign-in" component={SignIn} />
-            <Route path="/accounts/:public_id" component={Accounts} />
+            <Route path="/accounts/:id" component={Accounts} />
             <Route path="/accounts" component={Accounts} />
           </Switch>
         </div>

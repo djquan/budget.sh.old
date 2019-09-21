@@ -16,8 +16,8 @@ class AccountSidebar extends Component<Props> {
           {accountList.map((account: Account) =>
             <Link
               className="list-group-item list-group-item-action bg-light"
-              to={"/accounts/" + account.public_id}
-              key={account.public_id} >
+              to={"/accounts/" + account.id}
+              key={account.id} >
               {account.name}
             </Link>
           )}

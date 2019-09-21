@@ -5,19 +5,19 @@ import AccountList from "../components/AccountList"
 interface Props {
   match: {
     params: {
-      public_id: string
+      id: string
     }
   }
 }
 
 export interface Account {
   name: string,
-  public_id: string
+  id: string
 }
 
 class Accounts extends Component<Props> {
   render(): React.ReactNode {
-    const { public_id } = this.props.match.params;
+    const { id } = this.props.match.params;
     return (
       <AccountList>
         {(accountList: Account[]) => (
@@ -28,16 +28,16 @@ class Accounts extends Component<Props> {
                   <AccountSidebar accounts={accountList} />
                   <div id="page-content-wrapper">
                     <div className="container-fluid">
-                      {!public_id && (
+                      {!id && (
                         <>
                           <h1 className="mt-4">All Accounts</h1>
-                          <p>{public_id}</p>
+                          <p>{id}</p>
                         </>
                       )}
-                      {public_id && (
+                      {id && (
                         <>
-                          <h1 className="mt-4">{public_id}</h1>
-                          <p>{public_id}</p>
+                          <h1 className="mt-4">{id}</h1>
+                          <p>{id}</p>
                         </>
                       )}
                     </div>

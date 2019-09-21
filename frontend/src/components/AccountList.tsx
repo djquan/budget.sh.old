@@ -10,7 +10,7 @@ const LIST_ACCOUNTS_QUERY = gql`
   query ListAccount {
     listAccounts {
       name
-      public_id
+      id
     }
   }
 `;
