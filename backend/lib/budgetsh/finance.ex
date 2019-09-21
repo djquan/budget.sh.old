@@ -22,13 +22,13 @@ defmodule BudgetSH.Finance do
   @doc """
   Gets a single account by id
 
-  Raises `Ecto.NoResultsError` if the Account does not exist.
+  Returns nil if the account does not exist
   """
-  @spec get_account!(binary, %User{}) :: %Account{}
-  def get_account!(id, user) do
+  @spec get_account(binary, %User{}) :: %Account{} | nil
+  def get_account(id, user) do
     user
     |> Account.user_scoped()
-    |> Repo.get_by!(id: id)
+    |> Repo.get(id)
   end
 
   @doc """
@@ -108,6 +108,33 @@ defmodule BudgetSH.Finance do
   @spec delete_transaction(%Transaction{}) :: {:ok, %Transaction{}} | {:error, %Changeset{}}
   def delete_transaction(transaction) do
     Repo.delete(transaction)
+  end
+
+  # Dataloader
+
+  def datasource() do
+    Dataloader.Ecto.new(Repo, query: &query/2)
+  end
+
+  # def query(Booking, %{limit: limit, scope: :place}) do
+  #   Booking
+  #   |> where(state: "reserved")
+  #   |> order_by(asc: :start_date)
+  #   |> limit(^limit)
+  # end
+
+  # def query(Booking, %{scope: :user}) do
+  #   Booking
+  #   |> order_by(asc: :start_date)
+  # end
+
+  def query(Transaction, %{limit: limit}) do
+    Transaction
+    |> limit(^limit)
+  end
+
+  def query(queryable, _) do
+    queryable
   end
 
   defp link_transactions(changeset, transactions = [_]) do

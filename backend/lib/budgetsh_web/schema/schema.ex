@@ -1,7 +1,9 @@
 defmodule BudgetSHWeb.Schema.Schema do
   use Absinthe.Schema
   alias BudgetSHWeb.Resolvers
+  alias BudgetSH.Finance
   alias BudgetSHWeb.Schema.Middleware
+  import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
   import_types(Absinthe.Type.Custom)
 
   query do
@@ -15,6 +17,13 @@ defmodule BudgetSHWeb.Schema.Schema do
       arg(:user_accounts, :boolean)
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.list_accounts/3)
+    end
+
+    @desc "Get Account"
+    field :get_account, :account do
+      arg(:id, non_null(:string))
+      middleware(Middleware.Authenticate)
+      resolve(&Resolvers.Finance.get_account/3)
     end
   end
 
@@ -64,8 +73,13 @@ defmodule BudgetSHWeb.Schema.Schema do
   end
 
   object :transaction do
-    field :amount, non_null(:string)
     field :id, non_null(:string)
+    field :amount, non_null(:string)
+    field :currency_code, non_null(:string)
+    field :type, non_null(:transaction_type)
+    field :transaction_date, non_null(:date)
+    field :credits, list_of(:transaction), resolve: dataloader(Finance)
+    field :debits, list_of(:transaction), resolve: dataloader(Finance)
   end
 
   object :user do
@@ -78,10 +92,25 @@ defmodule BudgetSHWeb.Schema.Schema do
   end
 
   object :account do
+    field :id, non_null(:string)
     field :name, non_null(:string)
     field :user_account, non_null(:boolean)
-    field :id, non_null(:string)
+
+    field :transactions, list_of(:transaction) do
+      arg(:limit, type: :integer, default_value: 100)
+      resolve(dataloader(Finance, :transactions, args: %{}))
+    end
   end
 
-  def context(ctx), do: ctx
+  def context(ctx) do
+    loader =
+      Dataloader.new()
+      |> Dataloader.add_source(Finance, Finance.datasource())
+
+    Map.put(ctx, :loader, loader)
+  end
+
+  def plugins do
+    [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
+  end
 end

@@ -11,6 +11,7 @@ defmodule BudgetSH.Finance.Account do
     field :name, :string
     field :user_account, :boolean, default: false
     belongs_to :user, BudgetSH.Accounts.User
+    has_many :transactions, BudgetSH.Finance.Transaction
     timestamps()
   end
 

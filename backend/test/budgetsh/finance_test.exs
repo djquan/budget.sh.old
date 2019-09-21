@@ -65,20 +65,18 @@ defmodule BudgetSH.FinanceTest do
       assert list == [account]
     end
 
-    test "get_account!/2 returns the account with given id" do
+    test "get_account/2 returns the account with given id" do
       account = account_fixture()
 
-      assert Finance.get_account!(account.id, account.user)
+      assert Finance.get_account(account.id, account.user)
              |> Repo.preload(:user) == account
     end
 
-    test "get_account!/2 raises an exception if the account is correct but the user is not" do
+    test "get_account/2 raises an exception if the account is correct but the user is not" do
       account = account_fixture()
       bad_user = user_fixture(%{email: "hi@aol.com", password: "hunter2"})
 
-      assert_raise Ecto.NoResultsError, fn ->
-        Finance.get_account!(account.id, bad_user)
-      end
+      assert Finance.get_account(account.id, bad_user) == nil
     end
 
     test "create_account/2 with valid data creates a account" do
@@ -107,17 +105,14 @@ defmodule BudgetSH.FinanceTest do
       account = account_fixture()
       assert {:error, %Ecto.Changeset{}} = Finance.update_account(account, @invalid_account_attrs)
 
-      assert account ==
-               Finance.get_account!(account.id, account.user) |> Repo.preload(:user)
+      assert account == Finance.get_account(account.id, account.user) |> Repo.preload(:user)
     end
 
     test "delete_account/1 deletes the account" do
       account = account_fixture()
       assert {:ok, %Account{}} = Finance.delete_account(account)
 
-      assert_raise Ecto.NoResultsError, fn ->
-        Finance.get_account!(account.id, account.user)
-      end
+      assert Finance.get_account(account.id, account.user) == nil
     end
   end
 
