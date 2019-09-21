@@ -5,7 +5,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
   @query """
   mutation createTransactions($transactions: [TransactionInput]!) {
     createTransactions(transactions: $transactions) {
-      public_id
+      id
     }
   }
   """
@@ -36,7 +36,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
     input = %{
       transactions: [
         %{
-          account_id: visa.public_id,
+          account_id: visa.id,
           transaction_date: "2019-09-19",
           amount: "1234",
           currency_code: "USD",
@@ -44,7 +44,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
           type: "CREDIT"
         },
         %{
-          account_id: chipotle.public_id,
+          account_id: chipotle.id,
           transaction_date: "2019-09-19",
           amount: "1234",
           currency_code: "USD",
@@ -65,10 +65,10 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
              "data" => %{
                "createTransactions" => [
                  %{
-                   "public_id" => _public_id
+                   "id" => _id
                  },
                  %{
-                   "public_id" => _public_id_2
+                   "id" => _id_2
                  }
                ]
              }
@@ -83,7 +83,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
     input = %{
       transactions: [
         %{
-          account_id: visa.public_id,
+          account_id: visa.id,
           transaction_date: "2019-09-19",
           amount: "1234",
           currency_code: "USD",
@@ -91,7 +91,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateTransactionsTest do
           type: "CREDIT"
         },
         %{
-          account_id: chipotle.public_id,
+          account_id: chipotle.id,
           transaction_date: "2019-09-19",
           amount: "1234",
           currency_code: "USD",

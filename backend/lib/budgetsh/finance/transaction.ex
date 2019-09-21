@@ -8,10 +8,11 @@ defmodule BudgetSH.Finance.Transaction do
 
   defenum(TransactionTypeEnum, :transaction_type, [:credit, :debit])
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "transactions" do
     field :amount, :string
     field :currency_code, :string
-    field :public_id, Ecto.UUID
     field :tags, {:array, :string}
     field :linked_transaction_id, :id
     field :transaction_date, :date

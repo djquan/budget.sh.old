@@ -6,7 +6,7 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateAccountTest do
   mutation createAccount($name: String!) {
     createAccount(name: $name) {
       name
-      public_id
+      id
       user_account
     }
   }
@@ -41,14 +41,14 @@ defmodule BudgetSHWeb.Schema.Mutation.CreateAccountTest do
              "data" => %{
                "createAccount" => %{
                  "name" => "Chipotle",
-                 "public_id" => public_id,
+                 "id" => id,
                  "user_account" => false
                }
              }
            } = json_response(conn, 200)
 
     assert [account] = Finance.list_accounts(user)
-    assert account.public_id == public_id
+    assert account.id == id
     assert account.name == "Chipotle"
     assert account.user_account == false
   end

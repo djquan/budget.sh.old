@@ -65,7 +65,7 @@ defmodule BudgetSHWeb.Schema.Schema do
 
   object :transaction do
     field :amount, non_null(:string)
-    field :public_id, non_null(:string)
+    field :id, non_null(:string)
   end
 
   object :user do
@@ -80,7 +80,7 @@ defmodule BudgetSHWeb.Schema.Schema do
   object :account do
     field :name, non_null(:string)
     field :user_account, non_null(:boolean)
-    field :public_id, non_null(:string)
+    field :id, non_null(:string)
   end
 
   def context(ctx), do: ctx

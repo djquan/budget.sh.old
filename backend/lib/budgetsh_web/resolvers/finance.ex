@@ -4,22 +4,21 @@ defmodule BudgetSHWeb.Resolvers.Finance do
   alias BudgetSH.Accounts.User
 
   @spec create_account(any, %{}, %{context: %{current_user: %User{}}}) ::
-          {:ok, %{name: binary, public_id: binary, user_account: boolean}}
+          {:ok, %{name: binary, id: binary, user_account: boolean}}
   def create_account(_, args = %{}, %{context: %{current_user: user}}) do
     case Finance.create_account(args, user) do
       {:ok, account} ->
-        {:ok,
-         %{name: account.name, public_id: account.public_id, user_account: account.user_account}}
+        {:ok, %{name: account.name, id: account.id, user_account: account.user_account}}
     end
   end
 
   @spec list_accounts(any, %{}, %{context: %{current_user: map}}) ::
-          {:ok, [%{name: binary, public_id: binary}]}
+          {:ok, [%{name: binary, id: binary}]}
   def list_accounts(_, args, %{context: %{current_user: user}}) do
     accounts =
       Finance.list_accounts(user)
       |> Enum.reject(fn account -> args[:user_accounts] && !account.user_account end)
-      |> Enum.map(fn account -> %{name: account.name, public_id: account.public_id} end)
+      |> Enum.map(fn account -> %{name: account.name, id: account.id} end)
 
     {:ok, accounts}
   end

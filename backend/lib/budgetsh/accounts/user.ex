@@ -3,6 +3,8 @@ defmodule BudgetSH.Accounts.User do
   import Ecto.Changeset
   alias BudgetSH.Accounts.User
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "users" do
     field :password_hash, :string
     field :email, :string

@@ -9,10 +9,7 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-alias BudgetSH.Repo
 alias BudgetSH.Finance
-alias BudgetSH.Finance.Account
-alias BudgetSH.Finance.Transaction
 
 {:ok, user} =
   %{password: "hunter2", email: "test@budget.sh"}

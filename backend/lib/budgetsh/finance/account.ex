@@ -5,9 +5,10 @@ defmodule BudgetSH.Finance.Account do
   alias BudgetSH.Accounts.User
   alias BudgetSH.Finance.Account
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "accounts" do
     field :name, :string
-    field :public_id, :binary_id
     field :user_account, :boolean, default: false
     belongs_to :user, BudgetSH.Accounts.User
     timestamps()
