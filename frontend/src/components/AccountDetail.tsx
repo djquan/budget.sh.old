@@ -19,12 +19,14 @@ const GET_ACCOUNT_QUERY = gql`
         credits {
           amount
           account {
+            id
             name
           }
         }
         debits {
           amount
           account {
+            id
             name
           }
         }

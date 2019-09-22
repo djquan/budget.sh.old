@@ -19,9 +19,8 @@ header {
 			font-size: 2rem;
 			@extend .navbar-brand;
 			letter-spacing: 3px;
-			background: orange;
-			-webkit-background-clip: text;
-			-webkit-text-fill-color: transparent;			
+      color: orange;
+      font-weight: 300
 		}
 		ul {
 			@extend .navbar-nav;

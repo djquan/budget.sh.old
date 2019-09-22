@@ -4,13 +4,13 @@ import CurrentUser from "./CurrentUser"
 import SignOut from "./SignOut"
 
 const Header: React.FC = () => (
-  <CurrentUser>
-    {currentUser => (
-      <header>
-        <nav>
-          <NavLink className="logo" to="/">
-            <div>budget.sh</div>
-          </NavLink>
+  <header>
+    <nav>
+      <NavLink className="logo" to="/">
+        <div>budget.sh</div>
+      </NavLink>
+      <CurrentUser>
+        {currentUser => (
           <ul>
             {currentUser && (
               <>
@@ -25,9 +25,10 @@ const Header: React.FC = () => (
               </>
             )}
           </ul>
-        </nav>
-      </header >)}
-  </CurrentUser>
+        )}
+      </CurrentUser>
+    </nav>
+  </header>
 )
 
 export default Header;
