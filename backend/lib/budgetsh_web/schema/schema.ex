@@ -85,6 +85,7 @@ defmodule BudgetSHWeb.Schema.Schema do
     field :transaction_date, non_null(:date)
     field :credits, list_of(:transaction), resolve: dataloader(Finance)
     field :debits, list_of(:transaction), resolve: dataloader(Finance)
+    field :account, :account, resolve: dataloader(Finance)
   end
 
   object :user do

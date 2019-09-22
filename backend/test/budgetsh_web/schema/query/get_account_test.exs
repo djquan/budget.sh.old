@@ -106,6 +106,9 @@ defmodule BudgetSHWeb.Schema.Mutation.GetAccountTest do
           amount
           id
           type
+          account {
+            name
+          }
           credits {
             id
           }
@@ -132,6 +135,9 @@ defmodule BudgetSHWeb.Schema.Mutation.GetAccountTest do
                    %{
                      "amount" => "100",
                      "id" => _,
+                     "account" => %{
+                       "name" => "some name"
+                     },
                      "type" => "CREDIT",
                      "credits" => [],
                      "debits" => []
