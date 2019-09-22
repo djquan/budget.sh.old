@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import { Account } from "../pages/Accounts"
 
 export interface Transaction {
-  id: String,
-  amount: String,
+  id: string,
+  amount: string,
+  transactionDate: string,
+  type: string,
+  credits: Transaction[],
+  debits: Transaction[],
+  account: Account
 }
 
 interface Props {
@@ -14,8 +19,23 @@ interface Props {
 class TransactionRow extends Component<Props> {
   render(): React.ReactNode {
     const { transaction } = this.props;
+    console.log(transaction)
+    if (transaction.type == "CREDIT") {
+      return (
+        <div className="row">
+          <div className="col-sm">{transaction.transactionDate}</div>
+          <div className="col-sm">{transaction.debits[0].account.name}</div>
+          <div className="col-sm">{transaction.amount}</div>
+          <div className="col-sm"></div>
+        </div>
+      )
+    }
+
     return (
       <div className="row">
+        <div className="col-sm">{transaction.transactionDate}</div>
+        <div className="col-sm">{transaction.credits[0].account.name}</div>
+        <div className="col-sm"></div>
         <div className="col-sm">{transaction.amount}</div>
       </div>
     )

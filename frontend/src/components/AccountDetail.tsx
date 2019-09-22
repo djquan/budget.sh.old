@@ -15,6 +15,19 @@ const GET_ACCOUNT_QUERY = gql`
         id
         amount
         type
+        transactionDate
+        credits {
+          amount
+          account {
+            name
+          }
+        }
+        debits {
+          amount
+          account {
+            name
+          }
+        }
       }
     }
   }
@@ -37,8 +50,16 @@ class AccountDetail extends Component<Props> {
             <>
               <h1 className="mt-4">{account.name}</h1>
               <div className="transaction-grid">
+                <div className="row">
+                  <div className="col-sm">Date</div>
+                  <div className="col-sm">From</div>
+                  <div className="col-sm">Credit</div>
+                  <div className="col-sm">Debit</div>
+                </div>
                 {account.transactions.map((transaction: Transaction) =>
-                  <TransactionRow transaction={transaction} />
+                  <div key={transaction.id}>
+                    <TransactionRow transaction={transaction} />
+                  </div>
                 )}
               </div>
             </>
