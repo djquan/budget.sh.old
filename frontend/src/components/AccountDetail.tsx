@@ -5,6 +5,7 @@ import Loading from "./Loading"
 import Error from "./Error"
 import { Account } from "../pages/Accounts"
 import TransactionRow, { Transaction } from "./TransactionRow"
+import TransactionCreate from "./TransactionCreate"
 
 const GET_ACCOUNT_QUERY = gql`
   query GetAccount($id: String!) {
@@ -36,7 +37,7 @@ const GET_ACCOUNT_QUERY = gql`
 `;
 
 interface Props {
-  id: String
+  id: string
 }
 
 class AccountDetail extends Component<Props> {
@@ -50,20 +51,24 @@ class AccountDetail extends Component<Props> {
           const account = data.getAccount
           return (
             <>
-              <h1 className="mt-4">{account.name}</h1>
-              <div className="transaction-grid">
-                <div className="row">
-                  <div className="col-sm">Date</div>
-                  <div className="col-sm">From</div>
-                  <div className="col-sm">Credit</div>
-                  <div className="col-sm">Debit</div>
-                </div>
-                {account.transactions.map((transaction: Transaction) =>
-                  <div key={transaction.id}>
-                    <TransactionRow transaction={transaction} />
-                  </div>
-                )}
-              </div>
+              <h1 className="mt-4">{account.name}</h1><br /><br />
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col-sm">Date</th>
+                    <th scope="col-sm">From</th>
+                    <th scope="col-sm">Credit</th>
+                    <th scope="col-sm">Debit</th>
+                    <th scope="col-sm"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TransactionCreate accountId={id} key={id} />
+                  {account.transactions.map((transaction: Transaction) =>
+                    <TransactionRow transaction={transaction} key={transaction.id} />
+                  )}
+                </tbody>
+              </table>
             </>
           )
         }}
