@@ -1,8 +1,8 @@
 defmodule BudgetSHWeb.Resolvers.Finance do
   alias BudgetSH.Finance
-  alias BudgetSH.Finance.Transaction
   alias BudgetSH.Finance.Account
   alias BudgetSH.Accounts.User
+  alias BudgetSHWeb.Schema.ChangesetErrors
 
   @spec create_account(any, %{}, %{context: %{current_user: %User{}}}) ::
           {:ok, %{name: binary, id: binary, user_account: boolean}}
@@ -38,21 +38,59 @@ defmodule BudgetSHWeb.Resolvers.Finance do
     end
   end
 
-  @spec create_transactions(any, %{transactions: [%{account_id: binary}]}, %{
-          context: %{current_user: %User{}}
-        }) ::
-          {:ok, [%Transaction{}]}
-  def create_transactions(_, %{transactions: args}, %{context: %{current_user: user}}) do
-    unknown_accounts =
-      Enum.filter(args, fn arg ->
-        !Finance.get_account(arg.account_id, user)
-      end)
-      |> Enum.map(fn arg -> arg.account_id end)
+  @spec create_transactions(any, %{credit: map, debit: map}, %{context: %{current_user: any}}) ::
+          any
+  def create_transactions(_, %{credit: credit, debit: debit}, %{context: %{current_user: user}}) do
+    args = [
+      Map.put(credit, :type, :credit),
+      Map.put(debit, :type, :debit)
+    ]
 
-    if length(unknown_accounts) > 0 do
-      {:error, "Cannot find account #{Enum.join(unknown_accounts, ",")}"}
+    with {:ok, transaction} <- Finance.create_transactions(args, user) do
+      transaction = transaction |> BudgetSH.Repo.preload([:credits, :debits])
+
+      if transaction.type == :credit do
+        {:ok, %{credit: transaction, debit: hd(transaction.debits)}}
+      else
+        {:ok, %{credit: hd(transaction.credits), debit: transaction}}
+      end
     else
-      Finance.create_transactions(args)
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create transactions",
+          details: ChangesetErrors.error_details(changeset)
+        }
+    end
+  end
+
+  def create_transactions(_, %{credit: credit}, %{context: %{current_user: user}}) do
+    args = [Map.put(credit, :type, :credit)]
+
+    with {:ok, transaction} <- Finance.create_transactions(args, user) do
+      {:ok, %{credit: transaction}}
+    else
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create transactions",
+          details: ChangesetErrors.error_details(changeset)
+        }
+    end
+  end
+
+  def create_transactions(_, %{debit: debit}, %{context: %{current_user: user}}) do
+    args = [Map.put(debit, :type, :debit)]
+
+    with {:ok, transaction} <- Finance.create_transactions(args, user) do
+      {:ok, %{debit: transaction}}
+    else
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create transactions",
+          details: ChangesetErrors.error_details(changeset)
+        }
     end
   end
 end

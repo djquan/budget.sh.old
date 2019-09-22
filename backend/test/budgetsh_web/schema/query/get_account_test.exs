@@ -40,7 +40,7 @@ defmodule BudgetSHWeb.Schema.Mutation.GetAccountTest do
           account_id: account.id
         }
       ]
-      |> Finance.create_transactions()
+      |> Finance.create_transactions(account.user)
 
     transaction
   end

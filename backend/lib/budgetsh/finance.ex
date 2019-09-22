@@ -60,15 +60,28 @@ defmodule BudgetSH.Finance do
     Repo.delete(account)
   end
 
-  def create_transactions(args) do
-    # changeset = %Transaction{}
-    #   |> Transaction.changeset(Map.put(hd, :id, Ecto.UUID.generate())
+  def create_transactions(args, user) do
+    account_ids =
+      args
+      |> Enum.map(fn arg ->
+        arg.account_id
+      end)
+
+    accounts =
+      user
+      |> Account.user_scoped()
+      |> select([a], a.id)
+      |> where([a], a.id in ^account_ids)
+      |> Repo.all()
+
+    missing_account_ids = account_ids -- accounts
 
     [changeset | linked_changeset] =
       args
       |> Enum.map(fn arg ->
         %Transaction{}
         |> Transaction.changeset(Map.put(arg, :id, Ecto.UUID.generate()))
+        |> Transaction.validate_account_id_not_in(missing_account_ids)
       end)
 
     changeset

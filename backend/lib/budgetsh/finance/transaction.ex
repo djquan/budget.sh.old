@@ -36,12 +36,21 @@ defmodule BudgetSH.Finance.Transaction do
   def changeset(transaction, attrs) do
     transaction
     |> cast(attrs, [:amount, :currency_code, :tags, :transaction_date, :type, :id, :account_id])
-    |> validate_required([:amount, :currency_code, :transaction_date, :type])
+    |> validate_required([:amount, :currency_code, :transaction_date, :type, :account_id])
     |> validate_format(:amount, ~r/^\d+$/, message: "must be numeric")
   end
 
   @spec account_scoped(%Account{}) :: Ecto.Query.t()
   def account_scoped(account) do
     from(t in __MODULE__, where: t.account_id == ^account.id)
+  end
+
+  def validate_account_id_not_in(changeset, missing_account_ids) do
+    validate_change(changeset, :account_id, fn :account_id, account_id ->
+      case Enum.member?(missing_account_ids, account_id) do
+        true -> [account_id: "Could not find account id"]
+        false -> []
+      end
+    end)
   end
 end

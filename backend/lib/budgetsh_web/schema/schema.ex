@@ -51,8 +51,9 @@ defmodule BudgetSHWeb.Schema.Schema do
     end
 
     @desc
-    field :create_transactions, :transaction do
-      arg(:transactions, list_of(:transaction_input))
+    field :create_transactions, :create_transaction_result do
+      arg(:credit, :transaction_input)
+      arg(:debit, :transaction_input)
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.create_transactions/3)
     end
@@ -69,7 +70,11 @@ defmodule BudgetSHWeb.Schema.Schema do
     field :amount, non_null(:string)
     field :currency_code, non_null(:string)
     field :tags, list_of(:string)
-    field :type, non_null(:transaction_type)
+  end
+
+  object :create_transaction_result do
+    field :credit, :transaction
+    field :debit, :transaction
   end
 
   object :transaction do

@@ -61,5 +61,16 @@
       ],
       "group": "test",
     },
+    {
+      "label": "dialyzer",
+      "command": "mix dialyzer",
+      "type": "shell",
+      "problemMatcher": [
+        "$mixCompileError",
+        "$mixCompileWarning",
+        "$mixTestFailure"
+      ],
+      "group": "test",
+    }
   ]
 }

@@ -59,7 +59,7 @@ defmodule BudgetSH.FinanceTest do
       |> Enum.into(@valid_transaction_attrs)
       |> Map.put(:account_id, account.id)
 
-    {:ok, transaction} = Finance.create_transactions([attrs])
+    {:ok, transaction} = Finance.create_transactions([attrs], account.user)
     transaction |> Repo.preload(account: :user)
   end
 
@@ -141,29 +141,49 @@ defmodule BudgetSH.FinanceTest do
       assert [transaction] = Finance.list_transactions(transaction.account)
     end
 
-    test "create_transactions/1 creates a transaction" do
+    test "create_transactions/2 creates a transaction" do
       account = account_fixture()
 
       assert {:ok, %Transaction{} = transaction} =
-               Finance.create_transactions([
-                 Map.put(@valid_transaction_attrs, :account_id, account.id)
-               ])
+               Finance.create_transactions(
+                 [
+                   Map.put(@valid_transaction_attrs, :account_id, account.id)
+                 ],
+                 account.user
+               )
 
       transaction = Repo.preload(transaction, account: :user)
       assert transaction.amount == "100"
       assert transaction.account == account
     end
 
-    test "create_transactions/1 creates a transaction with linked transactions" do
+    test "create_transactions/2 fails if the account does not exist" do
+      assert {:error, %Ecto.Changeset{} = changeset} =
+               Finance.create_transactions(
+                 [
+                   Map.put(@valid_transaction_attrs, :account_id, Ecto.UUID.generate())
+                 ],
+                 user_fixture()
+               )
+
+      assert [
+               account_id: {"Could not find account id", []}
+             ] = changeset.errors
+    end
+
+    test "create_transactions/2 creates a transaction with linked transactions" do
       user = user_fixture()
       visa = account_fixture_for_user(user, %{name: "Visa", user_account: true})
       chipotle = account_fixture_for_user(user, %{name: "Chiptole"})
 
       assert {:ok, %Transaction{} = transaction} =
-               Finance.create_transactions([
-                 Map.put(%{@valid_transaction_attrs | type: :credit}, :account_id, visa.id),
-                 Map.put(%{@valid_transaction_attrs | type: :debit}, :account_id, chipotle.id)
-               ])
+               Finance.create_transactions(
+                 [
+                   Map.put(%{@valid_transaction_attrs | type: :credit}, :account_id, visa.id),
+                   Map.put(%{@valid_transaction_attrs | type: :debit}, :account_id, chipotle.id)
+                 ],
+                 user
+               )
 
       transaction = Repo.preload(transaction, [:debits, :credits, account: :user])
       assert transaction.amount == "100"
@@ -172,11 +192,16 @@ defmodule BudgetSH.FinanceTest do
       assert length(transaction.credits) == 0
     end
 
-    test "create_transactions/1 with invalid data returns error changeset" do
+    test "create_transactions/2 with invalid data returns error changeset" do
+      account = account_fixture()
+
       assert {:error, changeset = %Ecto.Changeset{}} =
-               Finance.create_transactions([
-                 Map.put(@invalid_transaction_attrs, :account_id, account_fixture().id)
-               ])
+               Finance.create_transactions(
+                 [
+                   Map.put(@invalid_transaction_attrs, :account_id, account.id)
+                 ],
+                 account.user
+               )
 
       assert [
                amount: {"must be numeric", [validation: :format]},
@@ -187,6 +212,24 @@ defmodule BudgetSH.FinanceTest do
                     type: BudgetSH.Finance.Transaction.TransactionTypeEnum,
                     validation: :cast
                   ]}
+             ] = changeset.errors
+    end
+
+    test "create_transactions/2 returns an error if the user does not match the account" do
+      user = user_fixture()
+      visa = account_fixture_for_user(user, %{name: "Visa", user_account: true})
+      wrong_user = user_fixture(%{email: "wrong@wrong.com"})
+
+      assert {:error, changeset = %Ecto.Changeset{}} =
+               Finance.create_transactions(
+                 [
+                   Map.put(@valid_transaction_attrs, :account_id, visa.id)
+                 ],
+                 wrong_user
+               )
+
+      assert [
+               account_id: {"Could not find account id", []}
              ] = changeset.errors
     end
 
