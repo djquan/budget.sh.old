@@ -46,4 +46,4 @@ alias BudgetSH.Finance
       account_id: chipotle.id
     }
   ]
-  |> Finance.create_transactions()
+  |> Finance.create_transactions(user)
