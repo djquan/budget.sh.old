@@ -1,4 +1,4 @@
-import React, { Component, SyntheticEvent, ChangeEvent } from "react";
+import React, { Component, ChangeEvent } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";

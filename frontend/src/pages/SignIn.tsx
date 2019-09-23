@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import { RouteComponentProps } from "react-router-dom";
-import { GET_CURRENT_USER_QUERY } from "../components/CurrentUser";
+import { GET_CURRENT_USER_QUERY } from "../components/Header";
 
 import Error from "../components/Error"
 import Loading from "../components/Loading"

@@ -1,34 +1,46 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import CurrentUser from "./CurrentUser"
 import SignOut from "./SignOut"
+import { useQuery } from "react-apollo";
+import gql from "graphql-tag";
+import Loading from "./Loading"
 
-const Header: React.FC = () => (
-  <header>
-    <nav>
-      <NavLink className="logo" to="/">
-        <div>budget.sh</div>
-      </NavLink>
-      <CurrentUser>
-        {currentUser => (
-          <ul>
-            {currentUser && (
-              <>
-                <li><NavLink to="/accounts">Accounts</NavLink></li>
-                <li><SignOut /></li>
-              </>
-            )}
-            {!currentUser && (
-              <>
-                <li><NavLink to="/sign-in">Sign In</NavLink></li>
-                <li><NavLink to="/sign-up" className="button">Sign Up</NavLink></li>
-              </>
-            )}
-          </ul>
-        )}
-      </CurrentUser>
-    </nav>
-  </header>
-)
+export const GET_CURRENT_USER_QUERY = gql`
+  query GetCurrentUser {
+    me {
+      email
+    }
+  }
+`;
+
+const Header: React.FC = () => {
+  const { loading, data } = useQuery(GET_CURRENT_USER_QUERY);
+  return (
+    <header>
+      <nav>
+        <NavLink className="logo" to="/">
+          <div>budget.sh</div>
+        </NavLink>
+        {loading && (
+          <Loading />
+        )}}
+        <ul>
+          {data && data.me && (
+            <>
+              <li><NavLink to="/accounts">Accounts</NavLink></li>
+              <li><SignOut /></li>
+            </>
+          )}
+          {(!data || !data.me) && (
+            <>
+              <li><NavLink to="/sign-in">Sign In</NavLink></li>
+              <li><NavLink to="/sign-up" className="button">Sign Up</NavLink></li>
+            </>
+          )}
+        </ul>
+      </nav>
+    </header>
+  )
+}
 
 export default Header;
