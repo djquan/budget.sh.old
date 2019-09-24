@@ -1,30 +1,42 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Account } from "../pages/Accounts"
+import gql from "graphql-tag";
+import Loading from "./Loading"
+import Error from "./Error"
+import { useQuery } from "react-apollo";
 
-interface Props {
-  accounts: Account[]
-}
+const LIST_ACCOUNTS_QUERY = gql`
+  query ListAccount {
+    listAccounts {
+      name
+      id
+      userAccount
+    }
+  }
+`;
 
-class AccountSidebar extends Component<Props> {
-  render(): React.ReactNode {
-    const accountList = this.props.accounts
-    return (
-      <div className="bg-light border-right" id="sidebar-wrapper">
-        <div className="sidebar-heading">Accounts</div>
-        <div className="list-group list-group-flush">
-          {accountList.filter((account: Account) => account.userAccount === true).map((account: Account) =>
+const AccountSidebar: React.FC = () => {
+  const { loading, data, error } = useQuery(LIST_ACCOUNTS_QUERY);
+  if (error) return Error(error)
+  if (loading) return <Loading />
+  return (
+    <div className="bg-light border-right" id="sidebar-wrapper">
+      <div className="sidebar-heading">Accounts</div>
+      <div className="list-group list-group-flush">
+        {(data && data.listAccounts) && (
+          data.listAccounts.filter((account: Account) => account.userAccount === true).map((account: Account) =>
             <Link
               className="list-group-item list-group-item-action bg-light"
               to={"/accounts/" + account.id}
               key={account.id} >
               {account.name}
             </Link>
-          )}
-        </div>
+          ))
+        }
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default AccountSidebar;
