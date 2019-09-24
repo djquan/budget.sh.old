@@ -27,13 +27,10 @@ class Accounts extends Component<Props> {
             {!id && (
               <>
                 <h1 className="mt-4">All Accounts</h1>
-                <p>{id}</p>
               </>
             )}
             {id && (
-              <>
-                <AccountDetail id={id} />
-              </>
+              <AccountDetail id={id} />
             )}
           </div>
         </div>

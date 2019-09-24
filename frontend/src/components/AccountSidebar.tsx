@@ -24,15 +24,17 @@ const AccountSidebar: React.FC = () => {
     <div className="bg-light border-right" id="sidebar-wrapper">
       <div className="sidebar-heading">Accounts</div>
       <div className="list-group list-group-flush">
-        {(data && data.listAccounts) && (
-          data.listAccounts.filter((account: Account) => account.userAccount === true).map((account: Account) =>
-            <Link
-              className="list-group-item list-group-item-action bg-light"
-              to={"/accounts/" + account.id}
-              key={account.id} >
-              {account.name}
-            </Link>
-          ))
+        {
+          data.listAccounts
+            .filter((account: Account) => account.userAccount === true)
+            .map((account: Account) =>
+              <Link
+                className="list-group-item list-group-item-action bg-light"
+                to={"/accounts/" + account.id}
+                key={account.id} >
+                {account.name}
+              </Link>
+            )
         }
       </div>
     </div>
