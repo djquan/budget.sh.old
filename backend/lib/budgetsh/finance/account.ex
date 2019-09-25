@@ -19,6 +19,10 @@ defmodule BudgetSH.Finance.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:name, :user_account])
+    |> unique_constraint(:name,
+      message: "Name already exists",
+      name: "user_account_name_unique_index"
+    )
     |> validate_required([:name])
   end
 

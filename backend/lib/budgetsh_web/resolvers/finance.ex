@@ -10,6 +10,12 @@ defmodule BudgetSHWeb.Resolvers.Finance do
     case Finance.create_account(args, user) do
       {:ok, account} ->
         {:ok, %{name: account.name, id: account.id, user_account: account.user_account}}
+
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create account", details: ChangesetErrors.error_details(changeset)
+        }
     end
   end
 
