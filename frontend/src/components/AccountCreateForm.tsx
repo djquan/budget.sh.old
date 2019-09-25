@@ -45,14 +45,17 @@ const AccountCreateForm = () => {
 
   return (
     <>
-      <input
-        name="AccountName"
-        type="text"
-        placeholder="create account"
-        value={accountName}
-        onChange={handleChange}
-        onBlur={submit}
-      />
+      <div className="input-group mb-3">
+        <input
+          name="AccountName"
+          className="form-control"
+          type="text"
+          placeholder="Create Account"
+          value={accountName}
+          onChange={handleChange}
+          onBlur={submit}
+        />
+      </div>
     </>
   )
 }

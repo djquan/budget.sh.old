@@ -36,7 +36,7 @@ const AccountSidebar: React.FC = () => {
                 {account.name}
               </Link>
             )
-        }
+        }<br />
         <AccountCreateForm />
       </div>
     </div>
