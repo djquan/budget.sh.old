@@ -15,7 +15,7 @@ class SignOut extends Component<Props> {
     return (
       <button className="signout" onClick={this.handleClick}>
         Sign Out
-            </button>
+      </button>
     );
   }
 }
