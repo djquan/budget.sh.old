@@ -37,7 +37,7 @@ const GET_ACCOUNT_QUERY = gql`
 
 const AccountDetail = ({ id }: { id: string }) => {
   const { loading, data, error } = useQuery(GET_ACCOUNT_QUERY, { variables: { id: id } });
-  if (error) return Error(error)
+  if (error) return <Error error={error} />
   if (loading) return <Loading />
   const account = data.getAccount
 

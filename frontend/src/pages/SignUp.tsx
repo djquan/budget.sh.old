@@ -66,7 +66,7 @@ class SignUp extends Component<RouteComponentProps> {
                 e.preventDefault();
                 signup();
               }}>
-              {Error(error)}
+              <Error error={error} />
               <fieldset>
                 <label htmlFor="email">Email</label>
                 <input

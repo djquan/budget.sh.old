@@ -66,7 +66,7 @@ class SignIn extends Component<RouteComponentProps> {
                 e.preventDefault();
                 signin();
               }}>
-              {Error(error)}
+              <Error error={error} />
               <fieldset>
                 <label htmlFor="email">Email</label>
                 <input

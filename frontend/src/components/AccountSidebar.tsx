@@ -18,7 +18,7 @@ const LIST_ACCOUNTS_QUERY = gql`
 
 const AccountSidebar: React.FC = () => {
   const { loading, data, error } = useQuery(LIST_ACCOUNTS_QUERY);
-  if (error) return Error(error)
+  if (error) return <Error error={error} />
   if (loading) return <Loading />
   return (
     <div className="bg-light border-right" id="sidebar-wrapper">

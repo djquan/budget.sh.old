@@ -1,7 +1,7 @@
 import React from "react";
 import { ApolloError } from "apollo-client";
 
-const Error = (error: ApolloError) => {
+const Error = ({ error }: { error: ApolloError }) => {
   if (!error) return <></>;
   let errorMessage;
   if (error.networkError) {
