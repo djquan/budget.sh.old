@@ -1,12 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Account } from "../pages/Accounts"
+import { useQuery } from "react-apollo";
 import gql from "graphql-tag";
 import Loading from "./Loading"
 import Error from "./Error"
-import { useQuery } from "react-apollo";
+import AccountCreateForm from "./AccountCreateForm"
 
-const LIST_ACCOUNTS_QUERY = gql`
+export const LIST_ACCOUNTS_QUERY = gql`
   query ListAccount {
     listAccounts {
       name
@@ -36,6 +37,7 @@ const AccountSidebar: React.FC = () => {
               </Link>
             )
         }
+        <AccountCreateForm />
       </div>
     </div>
   )
