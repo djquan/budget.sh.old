@@ -21,9 +21,7 @@ const Header: React.FC = () => {
         <NavLink className="logo" to="/">
           <div>budget.sh</div>
         </NavLink>
-        {loading && (
-          <Loading />
-        )}}
+        {loading && (<Loading />)}
         <ul>
           {data && data.me && (
             <>

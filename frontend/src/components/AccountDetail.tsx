@@ -43,7 +43,7 @@ const AccountDetail = ({ id }: { id: string }) => {
 
   return (
     <>
-      <h1 className="mt-4">{account.name}</h1><br /><br />
+      <h1 className="mt-4">{account.name}</h1><br />
       <table className="table">
         <thead>
           <tr>
