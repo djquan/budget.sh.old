@@ -105,6 +105,27 @@ defmodule BudgetSH.FinanceTest do
                Finance.create_account(@invalid_account_attrs, user_fixture())
     end
 
+    test "create_account/2 with duplicate names but the same user returns error changeset" do
+      user = user_fixture()
+      assert {:ok, %Account{}} = Finance.create_account(@valid_account_attrs, user)
+
+      assert {:error, %Ecto.Changeset{}} = Finance.create_account(@valid_account_attrs, user)
+    end
+
+    test "create_account/2 with duplicate names is case insensitive" do
+      user = user_fixture()
+      assert {:ok, %Account{}} = Finance.create_account(%{name: "test"}, user)
+      assert {:error, %Ecto.Changeset{}} = Finance.create_account(%{name: "TEST"}, user)
+    end
+
+    test "create_account/2 with duplicate name but different user returns ok" do
+      user = user_fixture()
+      assert {:ok, %Account{}} = Finance.create_account(@valid_account_attrs, user)
+
+      user2 = user_fixture(%{email: "test@example.com"})
+      assert {:ok, %Account{}} = Finance.create_account(@valid_account_attrs, user2)
+    end
+
     test "update_account/2 with valid data updates the account" do
       account = account_fixture()
       id = account.id
