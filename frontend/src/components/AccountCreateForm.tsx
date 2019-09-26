@@ -17,7 +17,7 @@ interface AllTasksResult {
   listAccounts: Account[]
 }
 
-const AccountCreateForm = () => {
+const AccountCreateForm = ({ onCreate }: { onCreate: (creating: boolean) => void }) => {
   const [accountName, setAccountName] = useState("");
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +35,7 @@ const AccountCreateForm = () => {
           data: { listAccounts: listAccounts.concat([createAccount]) },
         });
         setAccountName("")
+        onCreate(false)
       }
     }
   )
@@ -54,6 +55,11 @@ const AccountCreateForm = () => {
           value={accountName}
           onChange={handleChange}
           onBlur={submit}
+          onKeyDown={({ key }) => {
+            if (key === 'Enter') {
+              submit();
+            }
+          }}
         />
       </div>
     </>

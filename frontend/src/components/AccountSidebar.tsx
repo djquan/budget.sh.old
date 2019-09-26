@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Account } from "../pages/Accounts"
 import { useQuery } from "react-apollo";
@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 import Loading from "./Loading"
 import Error from "./Error"
 import AccountCreateForm from "./AccountCreateForm"
+import Button from "react-bootstrap/Button";
 
 export const LIST_ACCOUNTS_QUERY = gql`
   query ListAccount {
@@ -18,9 +19,11 @@ export const LIST_ACCOUNTS_QUERY = gql`
 `;
 
 const AccountSidebar: React.FC = () => {
+  const [creatingAccount, setCreatingAccount] = useState(false);
   const { loading, data, error } = useQuery(LIST_ACCOUNTS_QUERY);
   if (error) return <Error error={error} />
   if (loading) return <Loading />
+
   return (
     <div className="bg-light border-right" id="sidebar-wrapper">
       <div className="sidebar-heading">Accounts</div>
@@ -37,7 +40,16 @@ const AccountSidebar: React.FC = () => {
               </Link>
             )
         }<br />
-        <AccountCreateForm />
+        {!creatingAccount && <Button
+          variant="primary"
+          onClick={() => {
+            setCreatingAccount(true);
+          }}
+        >
+          Create Account
+        </Button>
+        }
+        {creatingAccount && <AccountCreateForm onCreate={setCreatingAccount} />}
       </div>
     </div>
   )
