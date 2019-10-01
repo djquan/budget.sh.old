@@ -6,7 +6,7 @@ import TransactionRow, { Transaction } from "./TransactionRow"
 import TransactionCreate from "./TransactionCreate"
 import { useQuery } from "react-apollo";
 
-const GET_ACCOUNT_QUERY = gql`
+export const GET_ACCOUNT_QUERY = gql`
   query GetAccount($id: String!) {
     getAccount(id: $id) {
       name
