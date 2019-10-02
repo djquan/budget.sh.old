@@ -12,6 +12,7 @@ on:
       - "backend/*/*/*/*/*/*"
       - "kubernetes/backend.yaml"
       - "kubernetes/migrate_job.yaml"
+      - ".github/workflows/backend_master.yml"
 jobs:
   test_backend:
     runs-on: ubuntu-latest
