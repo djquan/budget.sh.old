@@ -65,12 +65,9 @@ jobs:
     needs: build_push_image
     steps:
       - uses: actions/checkout@v1
-      - uses: azure/k8s-actions/setup-kubectl@master
+      - uses: azure/setup-kubectl@v1
         with:
           version: v1.15.3
-        env:
-          RUNNER_TEMPDIRECTORY: ${RUNNER_TEMP}
-          RUNNER_TOOLSDIRECTORY: ${RUNNER_TOOL_CACHE}
       - uses: azure/k8s-actions/k8s-set-context@master
         with:
           kubeconfig: "${{ secrets.KUBECONFIG }}"
