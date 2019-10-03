@@ -1,23 +1,25 @@
-import React, { Component } from "react";
-import { withRouter, RouteComponentProps } from "react-router";
-import { withApollo, WithApolloClient } from "react-apollo";
+import React from "react";
+import { withRouter, RouteComponentProps, useHistory } from "react-router";
+import { withApollo, WithApolloClient, useQuery } from "react-apollo";
+import { GET_CURRENT_USER_QUERY } from "./Header";
 
 type Props = WithApolloClient<RouteComponentProps>;
 
-class SignOut extends Component<Props> {
-  handleClick = () => {
-    localStorage.removeItem("auth-token");
-    this.props.client.resetStore();
-    this.props.history.push("/");
-  };
+const SignOut = () => {
+  let history = useHistory();
+  const { client } = useQuery(GET_CURRENT_USER_QUERY);
 
-  render() {
-    return (
-      <button className="signout" onClick={this.handleClick}>
-        Sign Out
-      </button>
-    );
+  const handleClick = () => {
+    client.resetStore();
+    localStorage.removeItem("auth-token");
+    history.push("/")
   }
+
+  return (
+    <button className="signout" onClick={handleClick}>
+      Sign Out
+    </button>
+  );
 }
 
 export default withRouter(withApollo<Props>(SignOut));
