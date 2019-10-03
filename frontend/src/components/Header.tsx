@@ -14,7 +14,7 @@ export const GET_CURRENT_USER_QUERY = gql`
 `;
 
 const Header: React.FC = () => {
-  const { loading, data } = useQuery(GET_CURRENT_USER_QUERY);
+  const { client, loading, data } = useQuery(GET_CURRENT_USER_QUERY);
   return (
     <header>
       <nav>
@@ -26,7 +26,7 @@ const Header: React.FC = () => {
           {data && data.me && (
             <>
               <li><NavLink to="/accounts">Accounts</NavLink></li>
-              <li><SignOut /></li>
+              <li><SignOut client={client} /></li>
             </>
           )}
           {(!data || !data.me) && (

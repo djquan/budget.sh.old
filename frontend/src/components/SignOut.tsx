@@ -1,14 +1,10 @@
 import React from "react";
-import { withRouter, RouteComponentProps, useHistory } from "react-router";
-import { withApollo, WithApolloClient, useQuery } from "react-apollo";
-import { GET_CURRENT_USER_QUERY } from "./Header";
+import { useHistory } from "react-router";
+import { NormalizedCacheObject } from "apollo-cache-inmemory";
+import { ApolloClient } from "apollo-client";
 
-type Props = WithApolloClient<RouteComponentProps>;
-
-const SignOut = () => {
+const SignOut = ({ client }: { client: ApolloClient<NormalizedCacheObject> }) => {
   let history = useHistory();
-  const { client } = useQuery(GET_CURRENT_USER_QUERY);
-
   const handleClick = () => {
     client.resetStore();
     localStorage.removeItem("auth-token");
@@ -22,4 +18,4 @@ const SignOut = () => {
   );
 }
 
-export default withRouter(withApollo<Props>(SignOut));
+export default SignOut;
