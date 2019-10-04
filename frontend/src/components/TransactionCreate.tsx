@@ -37,7 +37,6 @@ class TransactionCreate extends Component<Props> {
   }
 
   render(): React.ReactNode {
-
     return (
       <>
         <tr key="transaction-create">
