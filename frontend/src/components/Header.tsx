@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import SignOut from "./SignOut"
 import { useQuery } from "react-apollo";
 import gql from "graphql-tag";
-import Loading from "./Loading"
 
 export const GET_CURRENT_USER_QUERY = gql`
   query GetCurrentUser {
@@ -14,14 +13,13 @@ export const GET_CURRENT_USER_QUERY = gql`
 `;
 
 const Header: React.FC = () => {
-  const { client, loading, data } = useQuery(GET_CURRENT_USER_QUERY);
+  const { client, data } = useQuery(GET_CURRENT_USER_QUERY);
   return (
     <header>
       <nav>
         <NavLink className="logo" to="/">
           <div>budget.sh</div>
         </NavLink>
-        {loading && (<Loading />)}
         <ul>
           {data && data.me && (
             <>

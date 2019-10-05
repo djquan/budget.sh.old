@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Account } from "../pages/Accounts"
 import { useQuery } from "react-apollo";
 import gql from "graphql-tag";
-import Loading from "./Loading"
 import Error from "./Error"
 import AccountCreateForm from "./AccountCreateForm"
 import Button from "react-bootstrap/Button";
@@ -22,7 +21,7 @@ const AccountSidebar: React.FC = () => {
   const [creatingAccount, setCreatingAccount] = useState(false);
   const { loading, data, error } = useQuery(LIST_ACCOUNTS_QUERY);
   if (error) return <Error error={error} />
-  if (loading) return <Loading />
+  if (loading) return <></>
 
   return (
     <div className="bg-light border-right" id="sidebar-wrapper">
