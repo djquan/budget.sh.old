@@ -5,6 +5,7 @@ defmodule BudgetSHWeb.Schema.Schema do
   alias BudgetSHWeb.Schema.Middleware
   import Absinthe.Resolution.Helpers, only: [dataloader: 1, dataloader: 3]
   import_types(Absinthe.Type.Custom)
+  import_types(BudgetSHWeb.Schema.Types.UUID4)
 
   query do
     @desc "Get info on the currently logged in user"
@@ -21,7 +22,7 @@ defmodule BudgetSHWeb.Schema.Schema do
 
     @desc "Get Account"
     field :get_account, :account do
-      arg(:id, non_null(:string))
+      arg(:id, non_null(:uuid4))
       middleware(Middleware.Authenticate)
       resolve(&Resolvers.Finance.get_account/3)
     end
@@ -78,7 +79,7 @@ defmodule BudgetSHWeb.Schema.Schema do
   end
 
   object :transaction do
-    field :id, non_null(:string)
+    field :id, non_null(:uuid4)
     field :amount, non_null(:string)
     field :currency_code, non_null(:string)
     field :type, non_null(:transaction_type)
@@ -98,7 +99,7 @@ defmodule BudgetSHWeb.Schema.Schema do
   end
 
   object :account do
-    field :id, non_null(:string)
+    field :id, non_null(:uuid4)
     field :name, non_null(:string)
     field :user_account, non_null(:boolean)
 

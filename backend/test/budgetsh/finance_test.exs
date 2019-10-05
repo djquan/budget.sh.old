@@ -84,11 +84,17 @@ defmodule BudgetSH.FinanceTest do
              |> Repo.preload(:user) == account
     end
 
-    test "get_account/2 raises an exception if the account is correct but the user is not" do
+    test "get_account/2 returns nil if the account is correct but the user is not" do
       account = account_fixture()
       bad_user = user_fixture(%{email: "hi@aol.com", password: "hunter2"})
 
       assert Finance.get_account(account.id, bad_user) == nil
+    end
+
+    test "get_account/2 returns nil if the account does not exist" do
+      user = user_fixture(%{email: "hi@aol.com", password: "hunter2"})
+
+      assert Finance.get_account(Ecto.UUID.generate(), user) == nil
     end
 
     test "create_account/2 with valid data creates a account" do
