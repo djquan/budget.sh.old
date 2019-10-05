@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 import { LIST_ACCOUNTS_QUERY } from "./AccountSidebar"
+import Error from "../components/Error"
 
 const ACCOUNT_CREATE_MUTATION = gql`
   mutation CreateAccount($name: String!) {
@@ -25,7 +26,7 @@ const AccountCreateForm = ({ onCreate }: { onCreate: (creating: boolean) => void
     if (name === "AccountName") setAccountName(value);
   }
 
-  const [createAccount] = useMutation(
+  const [createAccount, { error: mutationError }] = useMutation(
     ACCOUNT_CREATE_MUTATION,
     {
       update(cache, { data: { createAccount } }) {
@@ -61,6 +62,7 @@ const AccountCreateForm = ({ onCreate }: { onCreate: (creating: boolean) => void
             }
           }}
         />
+        {mutationError && <Error error={mutationError} />}
       </div>
     </>
   )
