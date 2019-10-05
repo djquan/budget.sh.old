@@ -5,7 +5,6 @@ import Error from "./Error"
 import TransactionRow, { Transaction } from "./TransactionRow"
 import TransactionCreate from "./TransactionCreate"
 import { useQuery } from "react-apollo";
-import { useHistory } from "react-router";
 import Button from "react-bootstrap/Button";
 
 const GET_ACCOUNT_QUERY = gql`
@@ -49,7 +48,7 @@ const AccountDetail = ({ id }: { id: string }) => {
       <h1 className="mt-4">{account.name}</h1>
       <Button
         key={id}
-        variant="primary"
+        variant="info"
         onClick={() => {
           setShowTransactionCreate(!showTransactionCreate);
         }}>
