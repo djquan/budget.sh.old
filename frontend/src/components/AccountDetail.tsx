@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
 import Loading from "./Loading"
 import Error from "./Error"
 import TransactionRow, { Transaction } from "./TransactionRow"
 import TransactionCreate from "./TransactionCreate"
 import { useQuery } from "react-apollo";
+import { useHistory } from "react-router";
+import Button from "react-bootstrap/Button";
 
 const GET_ACCOUNT_QUERY = gql`
   query GetAccount($id: String!) {
@@ -37,13 +39,24 @@ const GET_ACCOUNT_QUERY = gql`
 
 const AccountDetail = ({ id }: { id: string }) => {
   const { loading, data, error } = useQuery(GET_ACCOUNT_QUERY, { variables: { id: id } });
+  const [showTransactionCreate, setShowTransactionCreate] = useState(false);
   if (error) return <Error error={error} />
   if (loading) return <Loading />
   const account = data.getAccount
 
   return (
     <>
-      <h1 className="mt-4">{account.name}</h1><br />
+      <h1 className="mt-4">{account.name}</h1>
+      <Button
+        key={id}
+        variant="primary"
+        onClick={() => {
+          setShowTransactionCreate(!showTransactionCreate);
+        }}>
+        {!showTransactionCreate && "Create Transaction"}
+        {showTransactionCreate && "Hide Create Transaction"}
+      </Button>
+      <br /><br />
       <table className="table">
         <thead>
           <tr>
@@ -55,7 +68,7 @@ const AccountDetail = ({ id }: { id: string }) => {
           </tr>
         </thead>
         <tbody>
-          <TransactionCreate accountId={id} key={id} />
+          {showTransactionCreate && <TransactionCreate accountId={id} key={id} />}
           {account.transactions.map((transaction: Transaction) =>
             <TransactionRow transaction={transaction} key={transaction.id} />
           )}
