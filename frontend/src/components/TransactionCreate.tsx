@@ -1,69 +1,66 @@
-import React, { Component, ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import Button from 'react-bootstrap/Button';
 
-
-interface Props {
-  accountId: string
-}
-
-class TransactionCreate extends Component<Props> {
-  state = {
+const TransactionCreate = ({ accountId }: { accountId: string }) => {
+  const [state, setState] = useState({
     transactionDate: new Date(),
     accountName: "",
     creditAmount: "",
     debitAmount: "",
-    accountId: this.props.accountId,
-  }
+    accountId: accountId,
+  })
 
-  handleDateChange = (date: Date) => {
-    this.setState({
-      transactionDate: date
+  const handleDateChange = (date: Date) => {
+    setState({
+      ...state,
+      ...{
+        transactionDate: date
+      }
     });
   };
 
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    this.setState({
-      [name]: value
+    setState({
+      ...state,
+      ...{ [name]: value }
     })
   }
 
-  handleButtonClick = () => {
-    console.log(this.state)
+  const handleButtonClick = () => {
+    console.log(state)
   }
 
-  render(): React.ReactNode {
-    return (
-      <>
-        <tr key="transaction-create">
-          <th scope="row">
-            <DatePicker
-              selected={this.state.transactionDate}
-              onChange={this.handleDateChange}
-            />
-          </th>
-          <td>
-            <input name="accountName" type="text" value={this.state.accountName} onChange={this.handleChange} />
-          </td>
-          <td>
-            <input name="creditAmount" type="text" value={this.state.creditAmount} onChange={this.handleChange} disabled={this.state.debitAmount !== ""} />
-          </td>
-          <td>
-            <input name="debitAmount" type="text" value={this.state.debitAmount} onChange={this.handleChange} disabled={this.state.creditAmount !== ""} />
-          </td>
-          <td>
-            <Button
-              variant="primary"
-              onClick={this.handleButtonClick}
-            >Create</Button>
-          </td>
-        </tr>
-      </>
-    )
-  }
+  return (
+    <>
+      <tr key="transaction-create">
+        <th scope="row">
+          <DatePicker
+            selected={state.transactionDate}
+            onChange={handleDateChange}
+          />
+        </th>
+        <td>
+          <input name="accountName" type="text" value={state.accountName} onChange={handleChange} />
+        </td>
+        <td>
+          <input name="creditAmount" type="text" value={state.creditAmount} onChange={handleChange} disabled={state.debitAmount !== ""} />
+        </td>
+        <td>
+          <input name="debitAmount" type="text" value={state.debitAmount} onChange={handleChange} disabled={state.creditAmount !== ""} />
+        </td>
+        <td>
+          <Button
+            variant="primary"
+            onClick={handleButtonClick}
+          >Create</Button>
+        </td>
+      </tr>
+    </>
+  )
 }
 
 export default TransactionCreate;
