@@ -62,7 +62,9 @@ const SignIn = () => {
         e.preventDefault();
         signIn({ variables: state });
       }}>
+
       {mutationError && <Error error={mutationError} />}
+
       <fieldset>
         <label htmlFor="email">Email</label>
         <input

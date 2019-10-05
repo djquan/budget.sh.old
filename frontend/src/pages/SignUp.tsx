@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
-import { RouteComponentProps } from "react-router-dom";
+import { useMutation } from "react-apollo";
+import { useHistory } from "react-router-dom";
 import { GET_CURRENT_USER_QUERY } from "../components/Header";
 
 import Error from "../components/Error"
@@ -18,84 +18,79 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
-class SignUp extends Component<RouteComponentProps> {
-  state = {
+const SignUp = () => {
+  const [state, setState] = useState({
     email: "",
     password: ""
-  };
+  });
 
-  handleChange = (event: { target: { name: any; value: any; }; }) => {
+  const history = useHistory();
+
+  const handleChange = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    setState({ ...state, ...{ [name]: value } });
   };
 
-  isFormValid = () => {
+  const isFormValid = () => {
     return (
-      this.state.email.length > 0 &&
-      this.state.password.length > 0
+      state.email.length > 0 &&
+      state.password.length > 0
     );
   };
 
-  handleCompleted = (data: { signup: { session: string; }; }) => {
-    localStorage.setItem("auth-token", data.signup.session);
+  const [signUp, { loading: mutationLoading, error: mutationError }] = useMutation(
+    SIGNUP_MUTATION,
+    {
+      update(cache, { data: { signup: { user } } }) {
+        cache.writeQuery({
+          query: GET_CURRENT_USER_QUERY,
+          data: { me: user }
+        });
+      },
+      onCompleted({ signup: { session } }) {
+        localStorage.setItem("auth-token", session);
+        history.push("/");
+      },
+    }
+  )
 
-    this.props.history.push("/");
-  };
+  if (mutationLoading) return <Loading />;
 
-  handleUpdate = (cache: { writeQuery: (arg0: { query: any; data: { me: any; }; }) => void; }, { data }: any) => {
-    cache.writeQuery({
-      query: GET_CURRENT_USER_QUERY,
-      data: { me: data.signup.user }
-    });
-  };
+  return (
+    <form
+      className="signup"
+      onSubmit={e => {
+        e.preventDefault();
+        signUp({ variables: state });
+      }}>
 
-  render(): React.ReactNode {
-    return (
-      <Mutation
-        mutation={SIGNUP_MUTATION}
-        variables={this.state}
-        onCompleted={this.handleCompleted}
-        update={this.handleUpdate}>
-        {(signup: () => void, { loading, error }: any) => {
-          if (loading) return <Loading />;
+      {mutationError && <Error error={mutationError} />}
 
-          return (
-            <form
-              className="signup"
-              onSubmit={e => {
-                e.preventDefault();
-                signup();
-              }}>
-              <Error error={error} />
-              <fieldset>
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  required
-                  value={this.state.email}
-                  onChange={this.handleChange}
-                />
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  required
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-                <button type="submit" disabled={!this.isFormValid()}>
-                  Sign Up
-                </button>
-              </fieldset>
-            </form>
-          );
-        }}
-      </Mutation>
-    );
-  }
+      <fieldset>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          required
+          value={state.email}
+          onChange={handleChange}
+        />
+        <label htmlFor="password">Password</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          required
+          value={state.password}
+          onChange={handleChange}
+        />
+        <button type="submit" disabled={!isFormValid()}>
+          Sign Up
+        </button>
+      </fieldset>
+    </form>
+  );
 }
 
 export default SignUp
