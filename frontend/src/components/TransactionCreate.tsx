@@ -9,7 +9,6 @@ interface Props {
   accountId: string
 }
 
-
 class TransactionCreate extends Component<Props> {
   state = {
     transactionDate: new Date(),
