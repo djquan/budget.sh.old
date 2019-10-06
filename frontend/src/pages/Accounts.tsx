@@ -23,7 +23,7 @@ const Accounts = () => {
             </>
           )}
           {id && (
-            <AccountDetail id={id} />
+            <AccountDetail id={id} key={id} />
           )}
         </div>
       </div>
