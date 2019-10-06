@@ -45,6 +45,7 @@ defmodule BudgetSH.Finance.Transaction do
     from(t in __MODULE__, where: t.account_id == ^account.id)
   end
 
+  @spec validate_account_id_not_in(%Ecto.Changeset{}, any) :: %Ecto.Changeset{}
   def validate_account_id_not_in(changeset, missing_account_ids) do
     validate_change(changeset, :account_id, fn :account_id, account_id ->
       case Enum.member?(missing_account_ids, account_id) do

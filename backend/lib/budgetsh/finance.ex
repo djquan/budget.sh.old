@@ -106,6 +106,7 @@ defmodule BudgetSH.Finance do
   def list_transactions(account) do
     account
     |> Transaction.account_scoped()
+    |> order_by(desc: :transaction_date)
     |> Repo.all()
   end
 
@@ -136,6 +137,7 @@ defmodule BudgetSH.Finance do
   def query(Transaction, %{limit: limit}) do
     Transaction
     |> limit(^limit)
+    |> order_by(desc: :transaction_date)
   end
 
   def query(queryable, _) do
