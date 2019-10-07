@@ -2,11 +2,13 @@ import React from "react";
 import AccountSidebar from "../components/AccountSidebar";
 import AccountDetail from "../components/AccountDetail"
 import { useParams } from "react-router";
+import { Transaction } from "../components/TransactionRow";
 
 export interface Account {
   name: string,
   id: string,
-  userAccount: boolean
+  userAccount: boolean,
+  transactions: Transaction[]
 }
 
 const Accounts = () => {

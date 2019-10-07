@@ -4,9 +4,9 @@ import { useMutation } from "react-apollo";
 import { LIST_ACCOUNTS_QUERY } from "./AccountSidebar"
 import Error from "../components/Error"
 
-const ACCOUNT_CREATE_MUTATION = gql`
-  mutation CreateAccount($name: String!) {
-    createAccount(name: $name, userAccount: true) {
+export const ACCOUNT_CREATE_MUTATION = gql`
+  mutation CreateAccount($name: String!, $userAccount: Boolean) {
+    createAccount(name: $name, userAccount: $userAccount) {
       id
       name
       userAccount
@@ -14,7 +14,7 @@ const ACCOUNT_CREATE_MUTATION = gql`
   }
 `;
 
-interface AllTasksResult {
+export interface AllTasksResult {
   listAccounts: Account[]
 }
 
@@ -42,7 +42,7 @@ const AccountCreateForm = ({ onCreate }: { onCreate: (creating: boolean) => void
   )
 
   const submit = () => {
-    createAccount({ variables: { name: accountName } })
+    createAccount({ variables: { name: accountName, userAccount: true } })
   }
 
   return (

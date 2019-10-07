@@ -7,7 +7,7 @@ import TransactionCreate from "./TransactionCreate"
 import { useQuery } from "react-apollo";
 import Button from "react-bootstrap/Button";
 
-const GET_ACCOUNT_QUERY = gql`
+export const GET_ACCOUNT_QUERY = gql`
   query GetAccount($id: String!) {
     getAccount(id: $id) {
       name
