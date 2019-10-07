@@ -163,7 +163,7 @@ const TransactionCreate = ({ accountId }: { accountId: string }) => {
 
 
     const isCredit = state.creditAmount !== "";
-    const amount = parseFloat(isCredit ? state.creditAmount : state.debitAmount) * 100
+    const amount = parseFloat((isCredit ? state.creditAmount : state.debitAmount).replace(/,/g, "")) * 100
     const shared = {
       currencyCode: "USD",
       transactionDate: date,
