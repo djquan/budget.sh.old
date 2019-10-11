@@ -19,8 +19,8 @@ jobs:
       - uses: actions/checkout@v1
       - name: Docker Registry
         env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - name: Build and Push
         run: make build-frontend push-frontend
