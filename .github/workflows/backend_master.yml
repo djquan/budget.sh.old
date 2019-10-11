@@ -50,6 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: test_backend
     steps:
+      - uses: actions/checkout@v1
       - name: Docker Registry
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
