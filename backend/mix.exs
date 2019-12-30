@@ -30,19 +30,19 @@ defmodule BudgetSH.MixProject do
 
   defp deps do
     [
-      {:phoenix, "~> 1.4.9"},
+      {:phoenix, "~> 1.4.11"},
       {:phoenix_pubsub, "~> 1.1"},
-      {:phoenix_ecto, "~> 4.0"},
+      {:phoenix_ecto, "~> 4.1.0"},
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:absinthe, "~> 1.4.2"},
-      {:absinthe_plug, "~> 1.4.0"},
-      {:absinthe_phoenix, "~> 1.4.0"},
+      {:absinthe, "~> 1.4.16"},
+      {:absinthe_plug, "~> 1.4.7"},
+      {:absinthe_phoenix, "~> 1.4.3"},
       {:argon2_elixir, "~> 2.0"},
-      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.7", only: [:dev], runtime: false},
       {:dataloader, "~> 1.0.0"},
       {:ecto_enum, "~> 1.3"},
       {:cors_plug, "~> 2.0"}
